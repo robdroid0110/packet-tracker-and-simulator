@@ -7,12 +7,12 @@ in place. These controls apply to the Logical workspace.
 - **Separate parallel cables:** restores direct straight connections. Multiple
   cables between the same visible endpoints get separate parallel lanes, including
   cables created in opposite directions and external links of collapsed groups.
-  Status colors, crossover dashes and endpoint lights remain visible. Hover or
+  Status colors and crossover dashes remain visible; endpoint lights appear when a link is inspected. Hover or
   keyboard-focus a cable to inspect its interfaces and status. Turn this setting
   off for coincident straight connections. The existing API key `routing` now
   controls lane separation; saved `true` values use this corrected display.
 - **Smart interface labels:** endpoint labels choose among available positions;
-  labels with no clear position are suppressed until the connection is inspected.
+  labels with no clear position are suppressed until the connection is inspected. In the default Smart mode, interface labels stay hidden at ordinary zoom and become visible on link/device inspection; clear labels also appear from 160% zoom.
   All/None are available. Existing Preferences label visibility still takes priority.
 - **Highlight related connections:** hovering, keyboard focusing or selecting a
   device emphasizes its incident links and neighbors. Selecting a cable highlights
@@ -30,7 +30,7 @@ in place. These controls apply to the Logical workspace.
   group to expand it, or use the manager to expand/collapse/ungroup. This is a visual
   grouping operation: all devices continue simulating and retain configurations.
 - **Zoom-aware detail:** keep icons and device names in overview; show collision-free
-  interface labels at 90% zoom and above, and model/IP subtitles at 110% and above.
+  interface labels at 160% zoom and above (or on hover/focus), and model/IP subtitles at 110% and above.
   Inspecting a connection reveals its labels at any zoom unless explicitly hidden.
   Disable the setting to keep full detail independently of zoom.
 
@@ -39,6 +39,16 @@ Older labs gain defaults; their existing positions are never automatically moved
 Rename/delete updates group membership. Undo/Redo applies to preferences, groups
 and applied layouts. Physical workspace cables and their physical distances are
 unchanged. Existing logical clusters remain separate navigation containers.
+
+## Icon-attached cables
+
+Logical topology cables now anchor to the visible icon perimeter instead of the surrounding device name/label rectangle. The geometry is measured in canvas coordinates and remains attached through zoom, dragging and parallel cables. Connection lights are displayed only while a cable is inspected, keeping dense diagrams uncluttered; down links still use their error colour. The underlying interfaces, cable types and simulation state are unchanged.
+
+Test the geometry explicitly with:
+
+```sh
+PLAYWRIGHT_MODULE=/path/to/playwright-core node tools/check_canvas_geometry.cjs
+```
 
 ## Agent API
 
@@ -104,7 +114,7 @@ During a drag, only attached cables/end labels move using their parallel offsets
 label placement is recalculated on release. These timings
 cover the diagram update only; existing state serialization, node positioning,
 browser paint and backend save costs remain additional. Raw samples are in
-local performance verification output.
+[research/performance/topology_presentation.json](research/performance/topology_presentation.json).
 
 Reproduce with an isolated generated fixture:
 

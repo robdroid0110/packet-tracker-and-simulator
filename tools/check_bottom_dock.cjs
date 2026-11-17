@@ -22,19 +22,20 @@ const fs=require('fs'),os=require('os'),path=require('path');
    await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
    const result=await page.evaluate(()=>{
     const rect=id=>document.getElementById(id).getBoundingClientRect(),dock=rect('bottomDock'),row=rect('paletteRow'),status=rect('statusBar'),time=rect('timeStrip');
-    const failures=[];
+    const failures=[],compact=document.body.classList.contains('pt-compact-layout'),canvasOnly=document.body.classList.contains('pt-compact-canvas');
     if(dock.left<0||dock.right>innerWidth+1||status.bottom>innerHeight+1)failures.push('dock outside viewport');
-    if(row.top<time.bottom-1||status.top<dock.bottom-1)failures.push('bars overlap');
-    if(document.getElementById('paletteRow').scrollWidth>document.getElementById('paletteRow').clientWidth+1)failures.push('horizontal dock overflow');
+    if(!canvasOnly&&(row.top<time.bottom-1||status.top<dock.bottom-1))failures.push('bars overlap');
+    if(!canvasOnly&&document.getElementById('paletteRow').scrollWidth>document.getElementById('paletteRow').clientWidth+1)failures.push('horizontal dock overflow');
     if(rect('workspace').height<60)failures.push('no usable canvas height');
-    for(const node of document.querySelectorAll('#timeStrip button')){const r=node.getBoundingClientRect();if(r.left<time.left-1||r.right>time.right+1||r.top<time.top-1||r.bottom>time.bottom+1)failures.push('time control clipped: '+node.id)}
-    if(row.height<90)failures.push('palette scroll area collapsed');
-    for(const id of ['categoryColumn','subPalette','rightDock']){const r=rect(id);if(r.left<row.left-1||r.right>row.right+1)failures.push(id+' clipped horizontally')}
+    for(const node of document.querySelectorAll('#timeStrip button')){const r=node.getBoundingClientRect();if((!compact&&(r.left<time.left-1||r.right>time.right+1))||r.top<time.top-1||r.bottom>time.bottom+1)failures.push('time control clipped: '+node.id)}
+    if(row.height<90&&!canvasOnly)failures.push('palette scroll area collapsed');
+    for(const id of ['categoryColumn','subPalette',...(compact?[]:['rightDock'])]){const r=rect(id);if(!canvasOnly&&(r.left<row.left-1||r.right>row.right+1))failures.push(id+' clipped horizontally')}
     const scenario=document.getElementById('scenarioPane');
-    for(const node of scenario.querySelectorAll('button,select')){const r=node.getBoundingClientRect(),s=scenario.getBoundingClientRect();if(r.left<s.left-1||r.right>s.right+1||r.top<s.top-1||r.bottom>s.bottom+1)failures.push('scenario control clipped: '+node.textContent)}
+    if(!compact)for(const node of scenario.querySelectorAll('button,select')){const r=node.getBoundingClientRect(),s=scenario.getBoundingClientRect();if(r.left<s.left-1||r.right>s.right+1||r.top<s.top-1||r.bottom>s.bottom+1)failures.push('scenario control clipped: '+node.textContent)}
     const cat=rect('categoryColumn'),tray=rect('subPalette'),right=rect('rightDock');
-    if(innerWidth>740&&Math.abs(cat.top-right.top)>1)failures.push('desktop panels not aligned');
-    if(innerWidth<=740&&right.top<tray.bottom-1)failures.push('small screen PDU panel not stacked');
+    if(!compact&&innerWidth>740&&Math.abs(cat.top-right.top)>1)failures.push('desktop panels not aligned');
+    if(!compact&&innerWidth<=740&&right.top<tray.bottom-1)failures.push('small screen PDU panel not stacked');
+    if(compact&&getComputedStyle(document.getElementById('rightDock')).display!=='none')failures.push('PDU drawer was not closed by default');
     if(innerWidth>=1280&&getComputedStyle(document.documentElement).getPropertyValue('--pt-global-scale')==='1'&&time.height>50)failures.push('time bar oversized');
     return {failures,dock:{left:dock.left,right:dock.right,top:dock.top,bottom:dock.bottom},status:{top:status.top,bottom:status.bottom},width:innerWidth,height:innerHeight,barHeight:Math.round(time.height),dockHeight:Math.round(dock.height),canvasHeight:Math.round(rect('workspace').height)};
    });
@@ -88,7 +89,7 @@ const fs=require('fs'),os=require('os'),path=require('path');
   await page.waitForFunction(()=>document.querySelector('#scenarioPane select').options.length===1);
   // Tiny/high-scale windows keep both stacked sections reachable by scrolling the dock.
   await page.setViewportSize({width:320,height:568});await page.evaluate(()=>document.documentElement.style.setProperty('--pt-global-scale','1.5'));
-  await page.locator('[data-category="network"]').click();await page.locator('#scenarioNewBtn').scrollIntoViewIfNeeded();
+  await page.locator('[data-category="network"]').click();await page.getByRole('button',{name:'Show packet event and scenario panels'}).click();await page.locator('#scenarioNewBtn').scrollIntoViewIfNeeded();
   await page.locator('#scenarioPane select').scrollIntoViewIfNeeded();if(!await page.locator('#scenarioPane select').isVisible())throw Error('Small-screen scenario controls unreachable');
   await page.locator('#playBtn').scrollIntoViewIfNeeded();if(!await page.locator('#playBtn').isVisible())throw Error('Small-screen playback unreachable');
   await page.emulateMedia({forcedColors:'active'});await page.keyboard.press('Tab');await page.locator('#paletteSearch').focus();if(await page.locator('#paletteSearch').evaluate(e=>getComputedStyle(e).outlineStyle)==='none')throw Error('Palette focus invisible');

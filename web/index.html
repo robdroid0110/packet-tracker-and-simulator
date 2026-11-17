@@ -32,6 +32,8 @@
   <link rel="stylesheet" href="/bottom-dock.css" />
   <link rel="stylesheet" href="/workspace-chrome.css" />
   <link rel="stylesheet" href="/topology-presentation.css" />
+  <link rel="stylesheet" href="/responsive-layout.css" />
+  <link rel="stylesheet" href="/activity.css" />
 </head>
 <body>
   <div id="menuBar">
@@ -42,7 +44,7 @@
   </div>
 
   <div id="mainToolbar" class="toolbar bevel">
-    <button id="newBtn" title="New"><img class="tb-icon" src="/assets/icons/toolbar/iTBNew.png" alt=""></button><button id="openBtn" title="Open"><img class="tb-icon" src="/assets/icons/toolbar/iTBOpen.png" alt=""></button><button id="saveBtn" title="Save"><img class="tb-icon" src="/assets/icons/toolbar/iTBSave.png" alt=""></button>
+    <button id="newBtn" title="New"><img class="tb-icon" src="/assets/icons/toolbar/iTBNew.png" alt=""></button><button id="openBtn" title="Open"><img class="tb-icon" src="/assets/icons/toolbar/iTBOpen.png" alt=""></button><button id="saveBtn" title="Save"><img class="tb-icon" src="/assets/icons/toolbar/iTBSave.png" alt=""></button><button id="savePktBtn" title="Experimental .pkt export: not validated with Cisco Packet Tracer">Export .pkt (beta)</button><button id="activityBtn" title="Learning activity instructions and progress" hidden>Activity</button>
     <button title="Print" disabled><img class="tb-icon" src="/assets/icons/toolbar/iTBPrint.png" alt=""></button><button title="Activity Wizard" disabled><img class="tb-icon" src="/assets/icons/toolbar/iTBActivityWizard.png" alt=""></button>
     <span class="sep"></span>
     <button title="Copy" disabled><img class="tb-icon" src="/assets/icons/toolbar/iTBCopy.png" alt=""></button><button title="Paste" disabled><img class="tb-icon" src="/assets/icons/toolbar/iTBPaste.png" alt=""></button>
@@ -204,5 +206,7 @@
   <script src="/bottom-dock.js"></script>
   <script src="/canvas-accessibility.js"></script>
   <script src="/topology-presentation.js"></script>
+  <script src="/responsive-layout.js"></script>
+  <script src="/activity-ui.js"></script>
 </body>
 </html>

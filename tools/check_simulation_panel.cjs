@@ -29,7 +29,7 @@ const fs=require('fs'),os=require('os'),path=require('path');
     }
     const title=panel.querySelector('.sim-filter-title').getBoundingClientRect(),summary=panel.querySelector('.sim-filter-summary').getBoundingClientRect(),actions=panel.querySelector('.sim-filter-actions').getBoundingClientRect();
     if(title.bottom>summary.top+1||summary.bottom>actions.top+1)fail.push('filter sections overlap');
-    for(const [id,h] of [['menuBar',24],['mainToolbar',39],['toolRail',39],['workspaceTabs',35]])if(Math.abs(document.getElementById(id).getBoundingClientRect().height-h*scale)>1)fail.push('top row size changed: '+id);
+    if(!document.body.classList.contains('pt-compact-layout'))for(const [id,h] of [['menuBar',24],['mainToolbar',39],['toolRail',39],['workspaceTabs',35]])if(Math.abs(document.getElementById(id).getBoundingClientRect().height-h*scale)>1)fail.push('top row size changed: '+id);
     return fail;
    },scale);
    if(failures.length)throw Error(width+'x'+height+' / '+scale+': '+failures.join('; '));

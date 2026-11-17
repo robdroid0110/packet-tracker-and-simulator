@@ -137,6 +137,11 @@ class Handler(SimpleHTTPRequestHandler):
                 with LOCK:self._json(schema() if path.endswith('/schema') else view(LAB))
             except (LabError,ValueError,TypeError) as exc:self._json({'ok':False,'error':str(exc)},400)
             return
+        if path == "/api/activity":
+            from netsim.activity import progress
+            with LOCK:
+                self._json({"ok": True, "activity": progress(LAB)})
+            return
         if path == "/api/state":
             with LOCK:
                 self._json(LAB.to_dict())
@@ -353,6 +358,43 @@ class Handler(SimpleHTTPRequestHandler):
                     invalid('operation_rejected',str(exc));return
                 save_state()
             self._json({'ok':True,'result':verification},202 if verification['status']=='queued' else 200)
+            return
+        if path == "/api/activity/action":
+            from netsim.activity import progress
+            try:
+                with LOCK:
+                    if not LAB.activity:
+                        raise ValueError("No learning activity is loaded")
+                    action = body.get("action")
+                    if action == "mark_page":
+                        page = body.get("page")
+                        reviewed = body.get("reviewed")
+                        if type(page) is not int or not 0 <= page < len(LAB.activity["pages"]) or type(reviewed) is not bool:
+                            raise ValueError("Invalid activity page or review state")
+                        completed = set(LAB.activity["completed_pages"])
+                        if reviewed: completed.add(page)
+                        else: completed.discard(page)
+                        LAB.activity["completed_pages"] = sorted(completed)
+                        save_state()
+                    elif action != "check_work":
+                        raise ValueError("Unsupported learning activity operation")
+                    self._json({"ok": True, "activity": progress(LAB)})
+            except ValueError as exc:
+                self._json({"ok":False,"error":str(exc)},400)
+            return
+        if path == "/api/lab/export":
+            import base64
+            from netsim.pkt_export import export_pkt
+            try:
+                if body.get("format") != "pkt":
+                    raise ValueError("Only the experimental network-only PKT exporter is supported")
+                with LOCK:
+                    encoded, warnings = export_pkt(LAB)
+                self._json({"ok":True,"format":"pkt",
+                            "data":base64.b64encode(encoded).decode("ascii"),
+                            "warnings":warnings})
+            except (LabError,ValueError) as exc:
+                self._json({"ok":False,"error":str(exc)},400)
             return
         if path == "/api/lab/import":
             from netsim.lab_import import decode_file

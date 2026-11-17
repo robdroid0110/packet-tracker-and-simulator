@@ -37,3 +37,8 @@ labs/*.json
 research/performance/*.json
 research/*-evidence.json
 *.log
+
+# Proprietary or private network labs and student activity files
+*.pka
+*.pkt
+labs/demos/*.json

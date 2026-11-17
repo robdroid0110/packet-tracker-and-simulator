@@ -9,3 +9,9 @@ legacy network simulator `.pkt` is a different, encoded file format from Packet 
 Agents can use `POST /api/lab/import` with JSON `{ "filename": "lab.pkt", "data": "BASE64_CONTENT", "commit": false }` to preview counts and warnings. Set `commit` to `true` to import and receive the new `state` and `safety_backup` name. The backup can be restored through `POST /api/backups/restore` with `{ "name": "..." }`. Existing `GET /api/state` exports the current Packet Tracker and Simulator JSON lab.
 
 The decoder in `netsim/pkt_codec` is adapted from [Unpacket](https://github.com/Punkcake21/Unpacket) under the MIT license; its copyright and license are in `netsim/pkt_codec/LICENSE`. No vendor sample lab or proprietary artwork is distributed with the importer.
+
+## Learning activities (.pka) and beta network export (.pkt)
+
+The desktop application now imports the working network and readable instruction pages from supported .pka activity files. It provides review tracking and partial, independent supported-field checks. Proprietary assessment scores, scripts, locking and embedded media do not round-trip. Import is deliberately cautious: a preview and backup precede any replacement. For the exact fidelity constraints, see [Activity interoperability](ACTIVITY_INTEROPERABILITY.md).
+
+The new **Export .pkt (beta)** control produces an experimental network-only container. It can be read by our importer but is **not confirmed to open in official Packet Tracer**. Keep the native .json file and do not submit beta exports as course work without independently validating them.

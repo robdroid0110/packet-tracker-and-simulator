@@ -125,7 +125,7 @@ $('#saveBtn').onclick=async()=>{
  try{const response=await fetch('/api/state');if(!response.ok)throw Error('Could not export lab');const blob=new Blob([JSON.stringify(await response.json(),null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='packet-tracker-lab.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);status('Lab saved as Packet Tracker and Simulator JSON')}
  catch(error){alert(error.message)}
 };
-const labFileInput=document.createElement('input');labFileInput.type='file';labFileInput.accept='.json,.pkt,application/json';labFileInput.hidden=true;document.body.append(labFileInput);
+const labFileInput=document.createElement('input');labFileInput.type='file';labFileInput.accept='.json,.pkt,.pka,application/json';labFileInput.hidden=true;document.body.append(labFileInput);
 $('#openBtn').onclick=()=>{labFileInput.value='';labFileInput.click()};
 labFileInput.onchange=async()=>{
  const file=labFileInput.files[0];if(!file)return;
@@ -134,12 +134,12 @@ labFileInput.onchange=async()=>{
   const content=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result.split(',')[1]);reader.onerror=()=>reject(Error('Could not read file'));reader.readAsDataURL(file)});
   const payload={filename:file.name,data:content};
   async function submit(commit){const response=await fetch('/api/lab/import',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({...payload,commit})});const data=await response.json();if(!response.ok||!data.ok)throw Error(data.error||'Import failed');return data}
-  const preview=await submit(false);const warnings=preview.warnings.length?'\n\n'+preview.warnings.join('\n'):'';
+  const preview=await submit(false);const list=preview.warnings||[];const warnings=list.length?'\n\n'+list.slice(0,12).join('\n')+(list.length>12?'\n... and '+(list.length-12)+' more warnings (see import documentation).':''):'';
   if(!confirm(`Open ${file.name}?\n${preview.devices} devices, ${preview.links} links.${warnings}\n\nThis replaces the current lab. A backup will be saved first.`))return;
-  const result=await submit(true);state=result.state;selected=null;linkSource=null;render();status(`Opened ${file.name}; previous lab backup: ${result.safety_backup}`);
+  const result=await submit(true);state=result.state;selected=null;linkSource=null;render();status(`Opened ${file.name}; previous lab backup: ${result.safety_backup}`);window.PacketTrackerActivity?.refresh();if(state.activity){window.PacketTrackerCanvasCamera?.fit();window.PacketTrackerActivity?.open()}
  }catch(error){alert('Could not open file: '+error.message);status('Open failed')}
 };
-function setZoom(z){zoom=Math.max(.25,Math.min(3,z));renderTopology()}$('#zoomIn').onclick=()=>setZoom(zoom+.1);$('#zoomOut').onclick=()=>setZoom(zoom-.1);$('#zoomReset').onclick=()=>setZoom(1);$('#fitBtn').onclick=()=>{const nodes=Object.values(state.devices||{});if(!nodes.length)return setZoom(1);const rect=workspace.getBoundingClientRect();const maxX=Math.max(...nodes.map(d=>d.x+98)),maxY=Math.max(...nodes.map(d=>d.y+78));setZoom(Math.min(2.5,(rect.width-28)/maxX,(rect.height-28)/maxY))};
+function setZoom(z){zoom=Math.max(.05,Math.min(3,z));renderTopology()}$('#zoomIn').onclick=()=>setZoom(zoom+.1);$('#zoomOut').onclick=()=>setZoom(zoom-.1);$('#zoomReset').onclick=()=>setZoom(1);$('#fitBtn').onclick=()=>{if(window.PacketTrackerCanvasCamera)window.PacketTrackerCanvasCamera.fit();else setZoom(1)};
 let simulationMode=false,clockStart=performance.now(),clockOffset=0,clockRunning=true;
 function setSimulationPanel(show){$('#simulationPanel').classList.toggle('hidden',!show);$('#eventListBtn').classList.toggle('active',show);$('#eventListBtn').setAttribute('aria-expanded',String(show))}
 $('#realtimeBtn').onclick=()=>{simulationMode=false;$('#realtimeBtn').classList.add('active');$('#simulationBtn').classList.remove('active');setSimulationPanel(false);status('Realtime mode')};
@@ -171,3 +171,36 @@ $('#rightColumnSplitter').ondblclick=()=>{const current=cssPx('--pdu-width');con
 $('#bottomResizeHandle').addEventListener('pointerdown',e=>{e.preventDefault();const el=e.currentTarget;el.setPointerCapture(e.pointerId);const startY=e.clientY,start=cssPx('--bottom-height');const move=ev=>{const v=Math.max(145,Math.min(420,start+(startY-ev.clientY)));setRootSize('--bottom-height',v);localStorage.setItem('packetTracker.bottomHeight',String(v))};const up=()=>{el.removeEventListener('pointermove',move);el.removeEventListener('pointerup',up)};el.addEventListener('pointermove',move);el.addEventListener('pointerup',up)});
 restoreDockSizes();
 fetch('/api/health').then(r=>r.json()).then(()=>$('#health').textContent='● engine online').catch(()=>$('#health').textContent='● engine offline');async function init(){try{catalog=await (await fetch('/api/catalog')).json()}catch(e){console.error('catalog load failed',e)}renderPalette();await fetchState()}window.ptInitialReady=init();
+
+// Keep the visible topology synchronized with authorized local agents.
+// This is a read-only poll, and it never interrupts an active drag or a dialog.
+let ptAgentSyncBusy=false;
+setInterval(async()=>{
+ if(ptAgentSyncBusy||document.hidden||drag||!$('#deviceDialog').classList.contains('hidden')||
+    document.activeElement?.matches('input, textarea, [contenteditable="true"]'))return;
+ ptAgentSyncBusy=true;
+ try{
+  const response=await fetch('/api/state',{cache:'no-store'});
+  if(!response.ok)return;
+  const next=await response.json();
+  if(JSON.stringify([next.devices,next.links,next.notes,next.workspace_tools?.diagram]) !==
+     JSON.stringify([state.devices,state.links,state.notes,state.workspace_tools?.diagram])){
+   const oldDevices=new Set(Object.keys(state.devices||{}));
+   const edge=link=>[link.a_device,link.a_if,link.b_device,link.b_if].join('|');
+   const oldLinks=new Set((state.links||[]).map(edge));
+   state=next;
+   render();
+   for(const name of Object.keys(next.devices||{})){
+    if(!oldDevices.has(name)){
+     const element=Array.from(nodesEl.querySelectorAll('.node')).find(n=>n.dataset.name===name);
+     element?.classList.add('pt-agent-arrive');
+    }
+   }
+   Array.from(wires.querySelectorAll('line.wire')).forEach((line,index)=>{
+    if(!oldLinks.has(edge(next.links[index])))line.classList.add('pt-agent-link');
+   });
+   status('Live agent update: topology synchronized');
+  }
+ }catch(error){console.debug('live agent sync unavailable',error)}
+ finally{ptAgentSyncBusy=false}
+},700);
