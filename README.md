@@ -1,8 +1,16 @@
 # Packet Tracker and Simulator
 
-Packet Tracker and Simulator is an open-source, local networking laboratory for Linux and Windows. Create virtual topologies in a graphical workspace or control the same deterministic network simulator through its agent API.
+**Independent open-source alternative to Cisco Packet Tracer. No login required. No data collection or telemetry.**
 
-The primary command is ./packet-tracker-simulator. The legacy netlab CLI remains available for backward compatibility. Supported features are documented below; some devices and protocols intentionally use simplified models.
+A network simulator for **Linux and Windows** with visual topology editing, traffic simulation and an agent API. Create, configure, inspect and test virtual networks locally without a mandatory account.
+
+![Packet Tracker and Simulator displaying a seven-device demonstration topology](assets/screenshots/network-topology.png)
+
+*Real application screenshot from an isolated synthetic demo lab. No personal lab data is shown.*
+
+> **Independent project:** Not affiliated with, endorsed by or sponsored by Cisco. Cisco Packet Tracer is a third-party product; this simulator uses its own models and has documented limitations.
+
+The primary CLI command is ./packet-tracker-simulator. The legacy netlab CLI remains available for backward compatibility. Some devices and protocols use intentionally simplified simulation models.
 
 ## Why this exists
 
@@ -14,7 +22,13 @@ The source is a Python-based application for Linux; the optional GUI needs Qt de
 
 ## Privacy and security
 
-The simulator runs locally, not as an authenticated public cloud service. Its HTTP API must not be exposed to untrusted networks or port-forwarded; lab data remains on the local machine. Read SECURITY.md before network exposure.
+- **No app login:** No user account, signup or cloud identity is required to launch or use the simulator.
+- **No data collection:** There are no analytics, tracking SDKs or application telemetry that sends usage data to the maintainers.
+- **Local-first:** Lab files, configurations, preferences and simulated packet events remain on your machine unless you explicitly export or share them.
+- **Simulated credentials are lab features:** Network router, server and VPN login workflows model network services; they are not login requirements for the application.
+- **Local server safety:** The HTTP API is for trusted local clients and should not be exposed to untrusted networks. The browser and local server can maintain local state and logs. Voluntarily opening third-party websites is outside this project's no-telemetry guarantee.
+
+Read [SECURITY.md](SECURITY.md) for deployment limitations and vulnerability reporting.
 
 ## Contributing and licence
 
@@ -36,7 +50,7 @@ In **Connections**, choose **Automatically Choose Connection Type**, then click 
 
 On the logical canvas, **Shift+D** focuses a device. Arrow keys navigate; **Shift+Arrow** moves the focused device, and **Enter** opens it or uses the chosen connection tool. See [keyboard and accessibility controls](WORKSPACE_ACCESSIBILITY_REFERENCE.md#logical-canvas-keyboard-controls) for cycling overlapping devices, larger moves, manual port selection and limitations.
 
-For verified network features and limitations, see [feature coverage](HELP_COVERAGE.md). The later [feature coverage](HELP_COVERAGE.md) includes reproducible measurements, [feature coverage](HELP_COVERAGE.md), and [feature coverage](HELP_COVERAGE.md).
+For supported protocols, verified workflows and known limitations, see [feature coverage](HELP_COVERAGE.md) and the automated tests.
 
 ## Core design rule
 
