@@ -81,6 +81,26 @@ class Handler(SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(raw)
 
+    def _reject_large_request(self, size: int, message):
+        # For a moderately oversized upload, consume at most 4 MB before
+        # replying. Otherwise a fast client can receive BrokenPipe while
+        # still sending and miss the useful 413 JSON response. Larger bodies
+        # are rejected without draining to avoid an unbounded upload DoS.
+        if 0 < size <= 4_000_000:
+            old_timeout = self.connection.gettimeout()
+            try:
+                self.connection.settimeout(1.5)
+                remaining = size
+                while remaining:
+                    chunk = self.rfile.read(min(remaining, 65536))
+                    if not chunk: break
+                    remaining -= len(chunk)
+            except (OSError, TimeoutError):
+                pass
+            finally:
+                self.connection.settimeout(old_timeout)
+        self._json({'ok': False, 'error': message}, 413)
+
     def do_GET(self):
         path = unquote(urlparse(self.path).path)
         if path.startswith("/assets/icons/"):
@@ -323,13 +343,13 @@ class Handler(SimpleHTTPRequestHandler):
             n = int(self.headers.get("content-length", "0"))
             if n < 0 or n > 17_000_000:
                 error={'code':'request_too_large','message':'request exceeds the 17 MB limit'} if path == '/api/v1/connectivity/ping' else 'request exceeds the 17 MB limit'
-                self._json({'ok':False,'error':error},413);return
+                self._reject_large_request(n,error);return
             if path == "/api/visuals/action" and (n<2 or n>1_500_000):
-                self._json({"ok":False,"error":"image upload request exceeds 1.5 MB"},413);return
+                self._reject_large_request(n,'image upload request exceeds 1.5 MB');return
             if path == "/api/workspace-tools/action" and (n<2 or n>17_000_000):
-                self._json({"ok":False,"error":"workspace request exceeds 17 MB"},413);return
+                self._reject_large_request(n,'workspace request exceeds 17 MB');return
             if path == "/api/lab/import" and (n<2 or n>11_000_000):
-                self._json({"ok":False,"error":"lab import request exceeds size limit"},413);return
+                self._reject_large_request(n,'lab import request exceeds size limit');return
             body = json.loads(self.rfile.read(n) or b"{}")
             if not isinstance(body,dict):
                 error={'code':'invalid_request','message':'request body must be a JSON object'} if path == '/api/v1/connectivity/ping' else 'request body must be a JSON object'
