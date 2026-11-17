@@ -8,6 +8,7 @@ from pathlib import Path
 import json
 import sys
 import os
+from urllib.request import urlopen
 
 from PyQt6.QtCore import QTimer,QUrl
 from PyQt6.QtWidgets import QApplication,QMainWindow
@@ -15,9 +16,13 @@ from PyQt6.QtWebEngineWidgets import QWebEngineView
 from PyQt6.QtWebEngineCore import QWebEnginePage
 
 BASE=os.environ.get("PTS_DESKTOP_ACTIVITY_URL", "http://127.0.0.1:8768")
-EXPECTED_DEVICES=int(os.environ.get("PTS_EXPECTED_DEVICES", "31"))
-EXPECTED_LINKS=int(os.environ.get("PTS_EXPECTED_LINKS", "41"))
-EXPECTED_PAGES=int(os.environ.get("PTS_EXPECTED_PAGES", "10"))
+with urlopen(BASE + "/api/state",timeout=10) as response:
+    _original_state=json.load(response)
+EXPECTED_DEVICES=len(_original_state.get("devices", {}))
+EXPECTED_LINKS=len(_original_state.get("links", []))
+EXPECTED_PAGES=len((_original_state.get("activity") or {}).get("pages", []))
+if not (EXPECTED_DEVICES and EXPECTED_LINKS and EXPECTED_PAGES):
+    raise SystemExit("Native activity test requires a nonempty private activity lab")
 OUTPUT=Path("/tmp/pts-native-export-test.pkt")
 SCREEN=Path("/tmp/pts-native-activity-test.png")
 VIEW=Path("/tmp/pts-native-activity-topology.png")

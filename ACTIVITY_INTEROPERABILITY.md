@@ -13,11 +13,9 @@ This is an interoperability prototype, not a replacement for Packet Tracer's com
 - Display semantic link status in the desktop topology: green = up/forwarding, amber = STP blocked/discarding, red = down, black = console. Cable patterns distinguish copper/fibre/serial/crossover where supported.
 - Experimental PKT network export via a desktop button. The codec output is self-consistent and can be decoded by our importer, but vendor compatibility is NOT established.
 
-## Findings from the locally supplied CCNA Mega Lab activity
+## Private-file interoperability verification
 
-The user's PKA uses Packet Tracer 9.0 and contains three 31-device / 41-link network snapshots (current, initial reference, answer reference), 10 instruction pages, and a comparison tree with 42,368 nodes. Three malformed legacy attribute tokens required XML recovery. The importer preserved 31 devices and 41 links. The independent checker supports 336 fields; 78 matched on import. This is not a Packet Tracer completion percentage.
-
-The original teacher activity, its binary media and decrypted instructor/answer data were inspected only on the authorised local machine. They are not committed, embedded as fixtures, or uploaded by this work.
+A third-party, user-authorized activity file was examined locally to validate encrypted container decoding, nonstandard XML recovery, the current working network, instructions, and supported-field checks. The source file, embedded media, instructor answer data, activity title and other identifying details are not redistributed or documented here. Synthetic tests are used in this repository instead.
 
 ## Known limitations
 
@@ -31,7 +29,7 @@ These are distinct large subsystems. Import success is not evidence of full simu
 
 ## Verified desktop functionality
 
-The desktop is PyQt6/QWebEngine, not the browser-only test harness. Using an isolated state file outside the Git repository, native desktop testing successfully loaded the 31-device activity, displayed all ten instruction pages in a modal window, marked and unmarked review progress, rendered 82 per-port status symbols, resized into a narrow split-screen layout, and saved an experimental PKT container. The container passed internal decode/import; official Packet Tracer acceptance remains unproven.
+The desktop is PyQt6/QWebEngine, not the browser-only test harness. Using an isolated state file outside the Git repository, native desktop testing loaded a private activity, displayed its instruction pages, marked and unmarked review progress, rendered state-derived link symbols, resized into a narrow split-screen layout, and saved an experimental PKT container. The container passed internal decode/import; official Packet Tracer acceptance remains unproven.
 
 The repository's test_activity_interoperability.py uses original synthetic fixtures, with no proprietary lesson data. A private file can optionally be tested locally by setting PTS_TEST_PKA to its path.
 
