@@ -1,0 +1,38 @@
+/* legacy simulator Physical Workspace: container geography and wiring-closet furniture */
+#ptPhysicalWorkspace .pt-physical-furniture{flex-wrap:wrap;align-content:flex-start;gap:18px;overflow:auto;padding:18px;align-items:flex-start}
+#ptPhysicalWorkspace .pt-physical-surface{flex:0 1 245px;min-width:195px;min-height:220px;max-height:calc(100% - 20px);overflow:auto;border:5px ridge #596b77;background:#d5dbe1;box-shadow:2px 4px 10px #0002;padding:7px;display:flex;flex-direction:column;gap:7px}
+#ptPhysicalWorkspace .pt-physical-surface h3{margin:-6px -6px 4px;padding:8px 9px;background:#394f63;color:white;font-size:12px;text-align:center}
+#ptPhysicalWorkspace .surface-rack{background:linear-gradient(90deg,#8898a6 0%,#e0e4eb 14%,#bbc9d2 85%,#667989 100%);border-color:#3a4650}
+#ptPhysicalWorkspace .surface-table{background:#e8d2ae;border-color:#8e673d}
+#ptPhysicalWorkspace .surface-table h3{background:#816343}
+#ptPhysicalWorkspace .surface-floor{background:#dddde2;border:2px solid #919ca8;min-height:165px}
+#ptPhysicalWorkspace .surface-shelf{background:#dde3d8;border:5px ridge #688077}
+#ptPhysicalWorkspace .surface-shelf h3{background:#416958}
+#ptPhysicalWorkspace .pt-physical-equipped{display:flex;flex-wrap:wrap;gap:4px;align-items:center;padding:5px;background:#f7fafc;border:1px solid #9caeb8;border-radius:2px;cursor:grab}
+#ptPhysicalWorkspace .pt-physical-equipped:active{cursor:grabbing}
+#ptPhysicalWorkspace .pt-physical-equipped button.pt-rack-device{flex:1;min-width:95px;margin:0;display:flex;gap:5px;border:0;padding:2px;background:transparent;text-align:left;color:#24374b}
+#ptPhysicalWorkspace .pt-physical-equipped button.pt-rack-device img{width:40px;height:26px;object-fit:contain}
+#ptPhysicalWorkspace .pt-rack-ports{display:flex;gap:3px;align-items:center;font-size:9px;color:#65717b}
+#ptPhysicalWorkspace .pt-rack-port-light{width:7px;height:7px;border-radius:50%;background:#d14443;box-shadow:0 0 3px #0005}
+#ptPhysicalWorkspace .pt-rack-port-light.is-up{background:#19c956;box-shadow:0 0 4px #2ab96d}
+#ptPhysicalWorkspace .pt-rack-move{padding:3px 5px;font-size:10px;white-space:nowrap}
+#ptPhysicalWorkspace .pt-physical-empty{font-size:11px;color:#77838d;text-align:center;padding:15px 5px}
+#ptPhysicalWorkspace .pt-physical-furniture .pt-rack-note{align-self:flex-start;flex:1 0 190px;max-width:230px}
+#ptPhysicalWorkspace .pt-physical-furniture .pt-rack-note button{margin:5px 3px;white-space:nowrap}
+#ptPhysicalWorkspace .pt-closet-container{padding:7px;font-size:11px;text-align:left}
+#ptPhysicalWorkspace .pt-physical-map-device{position:absolute;display:flex;flex-direction:column;align-items:center;gap:4px;width:105px;min-height:87px;border:1px solid #839dac;box-shadow:1px 2px 4px #0003;background:#fafafa;border-radius:4px;padding:6px 4px;cursor:grab;touch-action:none}
+#ptPhysicalWorkspace .pt-physical-map-device:active{cursor:grabbing}
+#ptPhysicalWorkspace .pt-map-device-open{display:flex;align-items:center;flex-direction:column;gap:2px;background:none;border:0;padding:2px;max-width:96px;font-size:11px}
+#ptPhysicalWorkspace .pt-map-device-open img{height:31px;max-width:62px;object-fit:contain}
+#ptPhysicalWorkspace .pt-map-device-move{font-size:9px;padding:3px 5px;background:#e3eff8}
+#ptPhysicalWorkspace .pt-location strong{max-width:166px;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:720px){
+ #ptPhysicalWorkspace .pt-physical-furniture{padding:8px;gap:8px}
+ #ptPhysicalWorkspace .pt-physical-surface{flex-basis:100%;max-height:280px}
+ #ptPhysicalWorkspace .pt-physical-furniture .pt-rack-note{max-width:none}
+}
+
+/* Maintain access to Physical navigation on narrower tablet/browser viewports. */
+#workspaceTabs .workspace-right{overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}
+#workspaceTabs .workspace-right button{flex:0 0 auto}
+#ptPhysicalWorkspace .pt-physical-map-device{max-width:105px}

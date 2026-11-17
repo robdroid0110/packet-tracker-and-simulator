@@ -1,0 +1,131 @@
+/* Physical Workspace screen-reader accessibility companion, vendor help §21 */
+#ptAccessiblePhysical[hidden]{display:none!important}
+#ptAccessiblePhysical{
+ position:fixed;inset:0;z-index:1100;
+ background:rgba(16,30,43,.78);
+ display:flex;align-items:center;justify-content:center;
+ font:13px/1.5 Arial,system-ui,sans-serif;color:#1d3446;
+ padding:12px;box-sizing:border-box
+}
+#ptAccessiblePhysical *{box-sizing:border-box}
+#ptAccessiblePhysical .pt-a11y-window{
+ width:min(1150px,100%);height:min(850px,95vh);background:#f5f8fa;
+ border:2px solid #799bb0;box-shadow:0 6px 30px #0008;display:flex;
+ flex-direction:column;min-height:280px;overflow:hidden
+}
+#ptAccessiblePhysical header,#ptAccessiblePhysical footer{
+ display:flex;align-items:center;gap:10px;padding:9px 14px;
+ background:#ddeaf1;border-bottom:1px solid #9eb5c3
+}
+#ptAccessiblePhysical header h2{font-size:17px;flex:1;margin:0}
+#ptAccessiblePhysical header button{font-size:21px;min-width:36px;min-height:32px}
+#ptAccessiblePhysical #ptA11yHelp{
+ margin:0;padding:8px 14px;font-size:12px;
+ border-bottom:1px solid #aec5d2;background:#eaf1f6
+}
+#ptAccessiblePhysical .pt-a11y-main{
+ display:grid;grid-template-columns:minmax(220px,30%) 1fr;
+ flex:1;overflow:hidden;min-height:0
+}
+#ptAccessiblePhysical .pt-a11y-nav{
+ min-width:0;overflow:auto;border-right:1px solid #acc1d0;
+ padding:10px;background:#e4edf4
+}
+#ptAccessiblePhysical .pt-a11y-content{
+ min-width:0;overflow:auto;padding:10px 14px;scroll-behavior:auto
+}
+#ptAccessiblePhysical h3{font-size:15px;margin:5px 0 8px}
+#ptAccessiblePhysical h4{font-size:13px;margin:7px 0}
+#ptAccessiblePhysical h5{font-size:12px;margin:5px 0}
+#ptAccessiblePhysical .pt-a11y-list{
+ list-style:none;margin:0;padding:0
+}
+#ptAccessiblePhysical .pt-a11y-list .pt-a11y-list{padding-left:0}
+#ptAccessiblePhysical .pt-a11y-nav-btn{
+ width:100%;display:block;padding:6px 7px;text-align:left;margin-bottom:2px;
+ font-size:12px;border:1px solid transparent;background:#f3f7fb;
+ color:#20394b;cursor:pointer;overflow-wrap:anywhere
+}
+#ptAccessiblePhysical .pt-a11y-nav-btn.current{
+ font-weight:700;background:#bdd8e9;border-color:#3c7696
+}
+#ptAccessiblePhysical #ptA11yBreadcrumb{
+ display:flex;gap:4px;flex-wrap:wrap;align-items:center;margin-bottom:8px;
+ font-size:11px
+}
+#ptAccessiblePhysical #ptA11yBreadcrumb button{
+ border:1px solid #bacdda;background:white;padding:3px 5px;font-size:11px
+}
+#ptAccessiblePhysical .pt-a11y-card{
+ border:1px solid #b3c8d5;background:#fff;
+ padding:10px 12px;margin:0 0 8px
+}
+#ptAccessiblePhysical .pt-a11y-card p{margin:5px 0;font-size:12px}
+#ptAccessiblePhysical .pt-a11y-device-button{
+ display:block;border:1px solid #99afbe;background:#eaf3f9;
+ width:100%;text-align:left;font-weight:700;padding:8px;margin-bottom:8px
+}
+#ptAccessiblePhysical .pt-a11y-selected-device{
+ background:#ccebd0;border:2px solid #348d43
+}
+#ptAccessiblePhysical button{
+ cursor:pointer;color:#182e3d
+}
+#ptAccessiblePhysical .pt-a11y-controls,
+#ptAccessiblePhysical .pt-a11y-surface-row{
+ display:flex;flex-wrap:wrap;gap:5px
+}
+#ptAccessiblePhysical .pt-a11y-controls button,
+#ptAccessiblePhysical .pt-a11y-surface-row button,
+#ptAccessiblePhysical .pt-a11y-card>button,
+#ptAccessiblePhysical .pt-a11y-port-row button,
+#ptAccessiblePhysical #ptA11yConnections button{
+ border:1px solid #819eaf;background:#edf4f8;padding:6px 9px;font-size:12px
+}
+#ptAccessiblePhysical .pt-a11y-ports{
+ margin-top:9px;padding-top:6px;border-top:1px solid #cad9e2
+}
+#ptAccessiblePhysical .pt-a11y-port-row{
+ padding:6px 0;border-top:1px solid #e2e8ee;
+ display:flex;align-items:center;gap:8px;flex-wrap:wrap
+}
+#ptAccessiblePhysical .pt-a11y-port-row span{flex:1;min-width:140px}
+#ptAccessiblePhysical .pt-a11y-add-device{
+ padding-top:7px;margin-top:7px;border-top:1px solid #c6d6df;
+ display:flex;align-items:center;gap:6px;flex-wrap:wrap
+}
+#ptAccessiblePhysical .pt-a11y-add-device h4{flex-basis:100%}
+#ptAccessiblePhysical .pt-a11y-add-device select,
+#ptAccessiblePhysical .pt-a11y-add-device input{
+ min-height:32px;border:1px solid #8aa7b7;padding:5px;font-size:12px
+}
+#ptAccessiblePhysical .pt-a11y-add-device button{
+ border:1px solid #819eaf;background:#e8f1f7;padding:7px
+}
+#ptAccessiblePhysical #ptA11yConnections{
+ border-top:1px solid #afc6d6;padding-top:9px
+}
+#ptAccessiblePhysical #ptA11yConnections p{font-size:11px}
+#ptAccessiblePhysical footer{border-top:1px solid #9eb5c3;border-bottom:0}
+#ptAccessiblePhysical footer p{
+ flex:1;margin:0;max-height:65px;overflow:auto;font-size:12px
+}
+#ptAccessiblePhysical footer button{
+ border:1px solid #7897aa;background:#fff;padding:7px 13px
+}
+#ptAccessiblePhysical .error{color:#a22222}
+#ptAccessiblePhysical :is(button,input,select,summary,[tabindex]):focus-visible{
+ outline:3px solid #e78c21!important;outline-offset:2px!important
+}
+@media(max-width:680px){
+ #ptAccessiblePhysical{padding:3px;font-size:12px}
+ #ptAccessiblePhysical .pt-a11y-window{height:99vh}
+ #ptAccessiblePhysical .pt-a11y-main{grid-template-columns:1fr;grid-template-rows:minmax(115px,30%) minmax(0,1fr)}
+ #ptAccessiblePhysical .pt-a11y-nav{border-right:0;border-bottom:1px solid #acc1d0}
+ #ptAccessiblePhysical header h2{font-size:13px}
+ #ptAccessiblePhysical #ptA11yHelp{font-size:10px;padding:5px}
+ #ptAccessiblePhysical footer{padding:6px}
+}
+@media(prefers-reduced-motion:reduce){
+ #ptAccessiblePhysical *{scroll-behavior:auto!important;transition:none!important;animation:none!important}
+}

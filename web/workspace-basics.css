@@ -1,0 +1,9 @@
+/* Workspace Basics: physical-device placements share a saved lab with the logical topology. */
+#ptPhysicalWorkspace .pt-placed-devices{position:absolute;right:16px;top:16px;min-width:230px;max-width:300px;max-height:calc(100% - 32px);overflow:auto;z-index:5;border:1px solid #98aebc;box-shadow:1px 2px 7px #0003;background:#fffdf8;padding:9px;display:grid;gap:6px}
+#ptPhysicalWorkspace .pt-placed-devices h3{font-size:12px;padding:0 3px 6px;margin:0;border-bottom:1px solid #cbd5dc}
+#ptPhysicalWorkspace .pt-placed-device{font-size:12px;border:1px solid #c7d5df;background:#eef5fa;border-radius:3px;padding:6px;text-align:left}
+#ptPhysicalWorkspace .pt-placed-device:hover{background:#d8edf8}
+#ptPhysicalWorkspace .pt-physical-move-btn{justify-self:start;padding:5px 12px;background:#e3eff6}
+#ptPhysicalWorkspace .pt-rack-note button{font-size:12px;padding:6px 9px}
+#ptPhysicalWorkspace .pt-rack .pt-rack-device{cursor:pointer}
+#ptPhysicalWorkspace .pt-location{touch-action:none}

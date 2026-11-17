@@ -1,0 +1,34 @@
+/* legacy network simulator 9 Help: Preferences and Font Setting / 4K Support */
+body{font-family:var(--pt-ui-font,Arial,Helvetica,sans-serif);font-size:var(--pt-ui-size,12px)}
+.pt-hide-device-labels .node .name,.pt-hide-device-labels .node .ipline{display:none}
+.pt-hide-link-lights .node .port-led{display:none}
+.pt-port-labels-off .wire-label{display:none}
+.pt-port-labels-hover .wire-label{display:none}
+.pt-port-labels-hover .wire-label.pt-label-highlight{display:block}
+.pt-no-animation *, .pt-no-animation *::before,.pt-no-animation *::after{animation:none!important;transition:none!important}
+.cli-screen,.cli-form input,.pc-command-screen,.pc-command-form input,#termOut,#termIn{font-size:var(--pt-cli-size,12px)}
+.pt-options-menu[hidden],.pt-prefs-overlay[hidden],.pt-prefs-page[hidden]{display:none!important}
+.pt-options-menu{position:fixed;z-index:180;min-width:235px;padding:4px;background:#f5f5f5;border:1px solid #888;box-shadow:2px 4px 9px #0003}
+.pt-options-menu button{display:flex;width:100%;justify-content:space-between;padding:6px 9px;border:none;background:transparent;text-align:left}
+.pt-options-menu button:hover,.pt-options-menu button:focus{background:#cfe8f6}
+.pt-options-menu span{color:#666;font-size:11px}
+.pt-prefs-overlay{position:fixed;inset:0;z-index:200;background:#121b2577;display:flex;align-items:center;justify-content:center;padding:20px}
+.pt-prefs-window{display:grid;grid-template-rows:32px 37px minmax(0,1fr) 44px;width:min(850px,96vw);height:min(660px,94vh);min-height:350px;background:#ebebeb;border:1px solid #6c6c6c;box-shadow:0 7px 26px #0005}
+.pt-prefs-title{display:flex;justify-content:space-between;align-items:center;padding:0 10px;border-bottom:1px solid #9a9a9a;background:#e7e7e7}
+.pt-prefs-title button{width:28px;height:26px;font-size:18px}
+.pt-prefs-tabs{display:flex;align-items:end;gap:2px;overflow-x:auto;padding:3px 5px 0;border-bottom:1px solid #a5a5a5}
+.pt-prefs-tabs button{height:30px;white-space:nowrap;font-size:11px;border:1px solid #aaa;border-bottom:none;background:#ddd;padding:3px 9px}
+.pt-prefs-tabs button.active{background:#fff;font-weight:bold;border-top:2px solid #246f9b}
+.pt-prefs-body{min-height:0;overflow:auto;margin:0 7px 7px;padding:12px 15px;background:white;border:1px solid #aaa;border-top:0}
+.pt-prefs-page fieldset{border:1px solid #aaa;margin:0 0 15px;padding:10px 15px}
+.pt-prefs-page legend{font-weight:bold;padding:0 5px}
+.pt-prefs-page label{display:flex;align-items:center;gap:8px;margin:10px 0}
+.pt-prefs-page label:has(select),.pt-prefs-page label:has(input[type=range]){justify-content:flex-start;flex-wrap:wrap}
+.pt-prefs-page input[type=range]{width:min(240px,55vw)}
+.pt-prefs-page input[type=text],.pt-prefs-page input[type=email],.pt-prefs-page select,.pt-prefs-page textarea{padding:4px;border:1px solid #aaa;background:#fff}
+.pt-prefs-page #ptProfileInfo{width:min(420px,70vw);height:76px;resize:vertical}
+.pt-prefs-page p{line-height:1.4;color:#555}
+.pt-prefs-disabled{opacity:.6}
+.pt-prefs-footer{display:flex;align-items:center;gap:8px;padding:7px 10px;background:#eaeaea;border-top:1px solid #aaa}
+.pt-prefs-footer button{min-width:75px;padding:5px 9px}
+.pt-prefs-spacer{flex:1}

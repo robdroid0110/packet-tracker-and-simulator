@@ -1,0 +1,156 @@
+/* legacy simulator Help §20: Industrial Control Panel container and workspace */
+#ptPhysicalWorkspace .pt-icp-workspace{
+ display:flex;flex-direction:column;gap:8px;padding:10px;min-height:calc(100% - 44px);
+ width:100%;max-width:100vw;min-width:0;box-sizing:border-box;
+ background:#d9e4eb;color:#20384b;font:12px Arial,sans-serif
+}
+#ptPhysicalWorkspace .pt-icp-toolbar{
+ display:flex;align-items:center;flex-wrap:wrap;gap:7px;
+ padding:7px 10px;background:#f2f6f8;border:1px solid #a4b7c4
+}
+#ptPhysicalWorkspace .pt-icp-toolbar strong{margin-right:auto;font-size:13px}
+#ptPhysicalWorkspace .pt-icp-toolbar button,
+#ptPhysicalWorkspace .pt-icp-toolbar select{
+ border:1px solid #9ab1c3;border-radius:3px;padding:6px 9px;
+ background:#f9fcff;color:#274154;font-size:11px
+}
+#ptPhysicalWorkspace .pt-icp-toolbar select{min-width:155px}
+#ptPhysicalWorkspace .pt-icp-instructions{
+ padding:7px;margin:0;border:1px solid #a7bdc4;background:#eef5f7;line-height:1.5
+}
+#ptPhysicalWorkspace .pt-icp-panels{
+ display:flex;position:relative;align-items:flex-start;justify-content:center;
+ gap:15px;overflow-x:auto;overflow-y:hidden;padding:10px 4px;min-height:525px
+}
+#ptPhysicalWorkspace .pt-icp-pane{
+ position:relative;width:460px;height:475px;min-width:320px;flex:0 1 460px;overflow:hidden;
+ border:12px ridge #647b87;border-radius:4px;box-shadow:2px 4px 13px #0005;
+ background-color:#e8edf0;
+ background-image:radial-gradient(circle,#a7bdc4 1px,transparent 1.3px);
+ background-size:2% 2%;touch-action:none
+}
+#ptPhysicalWorkspace .pt-icp-pane h3{
+ position:relative;z-index:3;margin:0;padding:8px;text-align:center;
+ background:#435869;color:#fff;font-size:12px;pointer-events:none
+}
+#ptPhysicalWorkspace .pt-icp-door{
+ background-color:#d7e2e9;border-color:#577182
+}
+#ptPhysicalWorkspace .pt-icp-cabinet{
+ background-color:#eef2f4;border-color:#5b6d7b
+}
+#ptPhysicalWorkspace .pt-icp-workspace.door-closed .pt-icp-cabinet{
+ visibility:hidden;position:absolute
+}
+#ptPhysicalWorkspace .pt-icp-workspace.door-closed .pt-icp-panels{justify-content:center}
+#ptPhysicalWorkspace .pt-icp-workspace.door-closed .pt-icp-door{
+ background-color:#a2b8c8;
+ background-image:linear-gradient(90deg,#8da5b4 5%,transparent 5%,transparent 95%,#768e9f 95%),
+   radial-gradient(circle,#7899a9 1px,transparent 1.3px);
+ background-size:100% 100%,2% 2%
+}
+#ptPhysicalWorkspace .pt-icp-workspace.door-closed .pt-icp-door .pt-icp-device{transform:translate(-50%,-50%) scaleX(-1)}
+#ptPhysicalWorkspace .pt-icp-handle{
+ position:absolute;top:43%;left:6px;z-index:9;border:2px solid #2f4f64;
+ width:20px;height:70px;border-radius:4px;background:#9eb0bd;cursor:pointer;
+ box-shadow:1px 2px 4px #0004
+}
+#ptPhysicalWorkspace .pt-icp-workspace.door-closed .pt-icp-handle{left:auto;right:9px}
+#ptPhysicalWorkspace .pt-icp-device{
+ position:absolute;z-index:4;transform:translate(-50%,-50%);min-width:80px;max-width:125px;
+ background:linear-gradient(#f7fafb,#c4d1db);border:2px solid #496474;
+ padding:5px;box-shadow:1px 2px 5px #0004;border-radius:3px;
+ display:flex;flex-direction:column;align-items:center;gap:2px;
+ cursor:grab;touch-action:none;user-select:none
+}
+#ptPhysicalWorkspace .pt-icp-device:active{cursor:grabbing}
+#ptPhysicalWorkspace .pt-icp-device.dragging{opacity:.75;z-index:12;pointer-events:none}
+#ptPhysicalWorkspace .pt-icp-device.mounted{border-color:#bb8b29;background:#fff4d9}
+#ptPhysicalWorkspace .pt-icp-device.powered::before{
+ content:"";position:absolute;top:4px;right:4px;width:7px;height:7px;
+ border-radius:50%;background:#2eb956;box-shadow:0 0 6px #2a9e50
+}
+#ptPhysicalWorkspace .pt-icp-device-open{
+ background:none;border:0;color:#132f42;font-weight:600;font-size:11px;
+ text-align:center;max-width:110px;overflow-wrap:anywhere;cursor:grab
+}
+#ptPhysicalWorkspace .pt-icp-device small{font-size:9px;color:#475e71;text-align:center}
+#ptPhysicalWorkspace .pt-icp-snap-indicator{background:#daf1d3;padding:1px 3px}
+#ptPhysicalWorkspace .pt-icp-fixture{
+ position:absolute;z-index:2;transform:translate(-50%,-50%);
+ height:26px;width:150px;max-width:30%;border:2px solid #768c92;
+ background:repeating-linear-gradient(90deg,#cfdae0 0,#cfdae0 16px,#acbdc5 16px,#acbdc5 18px);
+ display:flex;justify-content:center;align-items:center;gap:4px;
+ font-size:10px;font-weight:600;color:#314753;cursor:grab;touch-action:none;user-select:none
+}
+#ptPhysicalWorkspace .pt-icp-fixture-din{
+ height:16px;background:repeating-linear-gradient(90deg,#b4bcbf,#b4bcbf 9px,#88959c 9px,#88959c 12px);
+ border-color:#77858d;box-shadow:0 1px 4px #0003
+}
+#ptPhysicalWorkspace .pt-icp-fixture-wic{
+ height:27px;background:repeating-linear-gradient(90deg,#e7dfce,#e7dfce 7px,#bba98b 7px,#bba98b 9px);
+ border-color:#988565
+}
+#ptPhysicalWorkspace .pt-icp-fixture-wic.vertical{
+ width:27px;max-width:none;height:145px;background:repeating-linear-gradient(0deg,#e7dfce,#e7dfce 7px,#bba98b 7px,#bba98b 9px)
+}
+#ptPhysicalWorkspace .pt-icp-fixture.grouped{border-color:#e1ad37;border-width:3px}
+#ptPhysicalWorkspace .pt-icp-fixture button{
+ padding:1px 3px;cursor:pointer;font-size:9px;background:#fffaf0;border:1px solid #928b75
+}
+#ptPhysicalWorkspace .pt-icp-noelectrical{
+ position:absolute;left:10px;bottom:6px;font-size:10px;
+ color:#5e727e;pointer-events:none;background:#f9fdffe0;padding:4px
+}
+#ptPhysicalWorkspace .pt-icp-feedback{font-size:11px;margin:0;min-height:15px;color:#31536b}
+#ptPhysicalWorkspace .pt-icp-feedback.error,#ptPhysicalWorkspace .pt-icp-error{color:#9e2a2a}
+#ptPhysicalWorkspace .pt-icp-workspace.preview-mode .pt-icp-panels{cursor:default}
+#ptPhysicalWorkspace .pt-icp-workspace.preview-mode .pt-icp-device,
+#ptPhysicalWorkspace .pt-icp-workspace.preview-mode .pt-icp-fixture{cursor:default}
+#ptPhysicalWorkspace .pt-icp-tool:focus-visible,
+#ptPhysicalWorkspace .pt-icp-pane [role=button]:focus-visible{outline:2px solid #e8a234;outline-offset:2px}
+@media(max-width:950px){
+ #ptPhysicalWorkspace .pt-icp-workspace{padding:5px}
+ #ptPhysicalWorkspace .pt-icp-panels{justify-content:flex-start;min-height:440px;gap:7px}
+ #ptPhysicalWorkspace .pt-icp-pane{min-width:300px;flex:0 0 330px;height:405px;border-width:8px}
+ #ptPhysicalWorkspace .pt-icp-device{min-width:65px;max-width:95px;padding:3px}
+}
+@media(max-width:450px){
+ #ptPhysicalWorkspace .pt-icp-toolbar{padding:5px;gap:4px}
+ #ptPhysicalWorkspace .pt-icp-toolbar strong{flex-basis:100%}
+ #ptPhysicalWorkspace .pt-icp-panels{flex-direction:column;min-height:730px;align-items:stretch;overflow-x:hidden;overflow-y:auto}
+ #ptPhysicalWorkspace .pt-icp-pane{flex:0 0 350px;width:100%;min-width:0;height:350px}
+ #ptPhysicalWorkspace .pt-icp-workspace.door-closed .pt-icp-pane{flex-basis:355px}
+ #ptPhysicalWorkspace .pt-icp-instructions{font-size:10px}
+ #ptPhysicalWorkspace .pt-icp-noelectrical{font-size:9px}
+}
+
+
+/* ICP cabling delegates to the existing, real network-link API. */
+#ptPhysicalWorkspace .pt-icp-network{
+ padding:9px;background:#f2f6f8;border:1px solid #a9bdc8;
+ display:flex;flex-direction:column;gap:6px;max-width:min(100%,1100px)
+}
+#ptPhysicalWorkspace .pt-icp-network strong{font-size:12px}
+#ptPhysicalWorkspace .pt-icp-cable-hint{font-size:11px;color:#526b79;margin:2px 0}
+#ptPhysicalWorkspace .pt-icp-link-list{display:flex;flex-direction:column;gap:4px;max-height:190px;overflow:auto}
+#ptPhysicalWorkspace .pt-icp-link{
+ display:flex;gap:9px;align-items:center;flex-wrap:wrap;
+ border-left:3px solid #b04442;padding:5px 9px;background:#fff;
+ font-size:11px
+}
+#ptPhysicalWorkspace .pt-icp-link.online{border-left-color:#249e5c}
+#ptPhysicalWorkspace .pt-icp-link>span{flex:1;overflow-wrap:anywhere}
+#ptPhysicalWorkspace .pt-icp-link button{font-size:10px;padding:3px 7px}
+#ptPhysicalWorkspace .pt-icp-connect-form{
+ display:flex;gap:7px;align-items:flex-end;flex-wrap:wrap;
+ padding-top:7px;border-top:1px solid #c4d4df
+}
+#ptPhysicalWorkspace .pt-icp-connect-form label{
+ display:flex;flex-direction:column;gap:4px;font-size:10px;min-width:88px
+}
+#ptPhysicalWorkspace .pt-icp-connect-form select,
+#ptPhysicalWorkspace .pt-icp-connect-form button{
+ font-size:11px;padding:5px;border:1px solid #91adbc;background:#fff;
+ min-width:82px;max-width:150px
+}

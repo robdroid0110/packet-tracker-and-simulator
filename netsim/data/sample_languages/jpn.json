@@ -1,0 +1,22 @@
+{
+  "id": "jpn",
+  "name": "日本語",
+  "translations": {
+    "concept-arp": {
+      "title": "ARP と ICMP を追跡",
+      "instructions": "シミュレーションモードで Client から Server にシンプル PDU を送り、ARP と ICMP のイベントとスイッチの MAC アドレス学習を確認します。"
+    },
+    "skill-dhcp": {
+      "title": "DHCP クライアントの設定",
+      "instructions": "クライアントが DHCP で R1 からアドレスを取得するよう設定し、リースと 192.168.50.1 への接続を確認します。"
+    },
+    "design-addressing": {
+      "title": "ルーティング用アドレス設計",
+      "instructions": "重複しない二つの IPv4 サブネットを選び、R1、両ホスト、デフォルトゲートウェイを設定して双方向の接続を確認します。"
+    },
+    "troubleshoot-link": {
+      "title": "無効なリンクの復旧",
+      "instructions": "Client から Server に接続できません。トポロジーとインターフェースを確認し、障害を修復して接続を検証します。"
+    }
+  }
+}

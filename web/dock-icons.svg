@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <linearGradient id="body" x2="0" y2="1"><stop stop-color="#2bd5ed"/><stop offset=".5" stop-color="#0b8eb9"/><stop offset="1" stop-color="#07547b"/></linearGradient>
+  <linearGradient id="top" x2="0" y2="1"><stop stop-color="#88f4ff"/><stop offset="1" stop-color="#0a9ac6"/></linearGradient>
+ </defs>
+ <symbol id="router" viewBox="0 0 48 48">
+  <path d="M3 15v18c0 6 42 6 42 0V15" fill="url(#body)" stroke="#6ad9ef"/>
+  <ellipse cx="24" cy="15" rx="21" ry="9" fill="url(#top)" stroke="#9aeaf5"/>
+  <path d="m10 14 7-3v2h8v3h-8v2zm28 3-7 3v-2h-8v-3h8v-2z" fill="#f1ffff"/>
+  <path d="M7 32q17 8 34 0" fill="none" stroke="#53d8ee" opacity=".7"/>
+ </symbol>
+ <symbol id="switch" viewBox="0 0 48 48">
+  <path d="m3 19 11-9h31L35 19Z" fill="url(#top)" stroke="#8ceafa"/>
+  <path d="M3 19h32v20H3Zm32 0 10-9v20l-10 9Z" fill="url(#body)" stroke="#6ad9ef"/>
+  <path d="M7 26h5v5H7zm8 0h5v5h-5zm8 0h5v5h-5z" fill="#022b49" stroke="#9aeaf5"/>
+  <path d="M7 35h3m5 0h3m5 0h3" stroke="#5ffff0" stroke-width="2"/>
+ </symbol>
+ <symbol id="pc" viewBox="0 0 48 48">
+  <rect x="3" y="5" width="31" height="25" rx="3" fill="url(#body)" stroke="#8ceafa"/>
+  <path d="M7 9h23v16H7z" fill="#052a44" stroke="#b7f5ff"/>
+  <path d="M18 30v6m-8 2h17" fill="none" stroke="#b7f5ff" stroke-width="3"/>
+  <rect x="36" y="12" width="9" height="28" rx="2" fill="url(#body)" stroke="#8ceafa"/>
+  <path d="M38 17h5m-5 4h5" stroke="#b7f5ff"/><circle cx="40" cy="35" r="1.5" fill="#63ffec"/>
+ </symbol>
+ <symbol id="server" viewBox="0 0 48 48">
+  <rect x="10" y="3" width="28" height="42" rx="4" fill="url(#body)" stroke="#8ceafa"/>
+  <g fill="#052c48" stroke="#88e9ff"><rect x="14" y="8" width="20" height="8" rx="1"/><rect x="14" y="20" width="20" height="8" rx="1"/><rect x="14" y="32" width="20" height="8" rx="1"/></g>
+  <path d="M17 12h9m-9 12h9m-9 12h9" stroke="#b7f5ff"/><path d="M30 12h1m-1 12h1m-1 12h1" stroke="#48ffe2" stroke-width="3"/>
+ </symbol>
+ <symbol id="cloud" viewBox="0 0 48 48"><path d="M11 37a10 10 0 0 1-3-19 12 12 0 0 1 23-6 9 9 0 0 1 11 12 7 7 0 0 1-1 13Z" fill="url(#top)" stroke="#98f4ff"/></symbol>
+ <symbol id="connections" viewBox="0 0 48 48"><path d="M30 2 7 27h16l-6 19 25-29H26Z" fill="#ffc94a" stroke="#ffedaa"/><path d="m30 2-8 19h12L17 46l6-19H7Z" fill="#ff761c"/></symbol>
+ <symbol id="folder" viewBox="0 0 48 48"><path d="M4 12h16l4 5h20l-4 25H7Z" fill="url(#body)" stroke="#9aeaf5"/><path d="M5 19h39l-4 23H7Z" fill="url(#top)" stroke="#9aeaf5"/></symbol>
+ <symbol id="components" viewBox="0 0 48 48"><rect x="4" y="8" width="40" height="32" rx="3" fill="url(#body)" stroke="#8ceafa"/><rect x="17" y="17" width="14" height="14" fill="#063955" stroke="#b7f5ff"/><path d="M10 14v5m0 5v10m25-20h5m-5 7h5m-5 7h5M17 12v5m7-5v5m7 18v5m-7-5v5M9 35h5" stroke="#b7f5ff" stroke-width="2"/></symbol>
+ <symbol id="wireless" viewBox="0 0 48 48"><rect x="9" y="31" width="30" height="10" rx="3" fill="url(#body)" stroke="#8ceafa"/><g fill="none" stroke="#a3f6ff" stroke-width="2.8" stroke-linecap="round"><path d="M24 31V20m-6-7a10 10 0 0 0 0 14m12-14a10 10 0 0 1 0 14M12 7a18 18 0 0 0 0 26M36 7a18 18 0 0 1 0 26"/></g><circle cx="24" cy="20" r="3" fill="#5fffee"/></symbol>
+ <symbol id="hub" viewBox="0 0 48 48"><rect x="5" y="8" width="38" height="33" rx="3" fill="url(#body)" stroke="#8ceafa"/><path d="M11 14v21m6-21v21m7-21v21m7-21v21m6-21v21" stroke="#a3edff" stroke-width="2"/></symbol>
+ <symbol id="security" viewBox="0 0 48 48"><path d="m24 3 17 7v13c0 10-9 17-17 22C16 40 7 33 7 23V10Z" fill="url(#body)" stroke="#8ceafa"/><rect x="16" y="21" width="16" height="13" rx="2" fill="#082d47" stroke="#b7f5ff"/><path d="M19 21v-5a5 5 0 0 1 10 0v5" fill="none" stroke="#b7f5ff" stroke-width="2"/><circle cx="24" cy="27" r="2" fill="#67ffef"/></symbol>
+ <symbol id="network" viewBox="0 0 48 48"><path d="M24 18v8M10 33v-7h28v7" fill="none" stroke="#b7f5ff" stroke-width="2"/><use href="#router" x="10" y="0" width="28" height="25"/><rect x="3" y="33" width="15" height="10" rx="2" fill="url(#top)" stroke="#b7f5ff"/><rect x="30" y="33" width="15" height="10" rx="2" fill="url(#top)" stroke="#b7f5ff"/></symbol>
+</svg>

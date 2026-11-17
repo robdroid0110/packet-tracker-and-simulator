@@ -1,0 +1,22 @@
+{
+  "id": "zho",
+  "name": "简体中文",
+  "translations": {
+    "concept-arp": {
+      "title": "跟踪 ARP 和 ICMP",
+      "instructions": "进入仿真模式。从 Client 向 Server 发送简单 PDU，逐步查看 ARP 和 ICMP 事件，观察交换机学习 MAC 地址。"
+    },
+    "skill-dhcp": {
+      "title": "配置 DHCP 客户端",
+      "instructions": "配置客户端通过 DHCP 从 R1 获取地址。检查租约并测试与 192.168.50.1 的连通性。"
+    },
+    "design-addressing": {
+      "title": "设计路由地址方案",
+      "instructions": "选择两个不重叠的 IPv4 子网。配置 R1、两台主机及其默认网关，然后验证双向连通性。"
+    },
+    "troubleshoot-link": {
+      "title": "修复已禁用的链路",
+      "instructions": "Client 无法访问 Server。检查拓扑和接口状态，找出并修复故障，然后验证连通性。"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+/* Logical Workspace interaction controls based on legacy simulator 9 logical guide. */
+#ptSelectionRect{position:absolute;z-index:15;pointer-events:none;border:1px dashed #0069ae;background:#23a9e41c}
+#ptSelectionRect[hidden]{display:none}
+#ptSelectionCount{font-size:11px;min-width:68px;text-align:left;color:#e4f5ff;padding:0 5px}
+#workspace .node.pt-multi-selected{background:rgba(25,145,216,.19)!important;border:1px solid #0874ab!important;border-radius:4px}
+#workspace .node.pt-multi-selected .name{color:#153b63}
+#workspace .node.pt-multi-selected::before{content:"✓";position:absolute;left:0;top:0;font-size:11px;color:#fff;background:#1684b7;border-radius:2px;padding:0 3px}
+#mainToolbar button[title="Copy"],#mainToolbar button[title="Paste"],#mainToolbar button[title="Undo"],#mainToolbar button[title="Redo"]{opacity:1}
+.pt-theme-dark #ptSelectionCount{color:#d0e5f3}
+
+#ptAlignmentVertical,#ptAlignmentHorizontal{position:absolute;z-index:17;pointer-events:none;border:0}
+#ptAlignmentVertical:not([hidden]){top:0;bottom:0;width:1px;background:#ea3466}
+#ptAlignmentHorizontal:not([hidden]){left:0;right:0;height:1px;background:#ea3466}
+.pt-alignment-guide[hidden]{display:none!important}
+
+#ptViewport{display:block;max-width:240px;min-height:127px;padding:7px}
+#ptViewport[hidden]{display:none!important}
+#ptViewport>strong{font-size:11px;display:block;margin-bottom:7px}
+#ptViewport .pt-viewport-map{height:79px;position:relative;background:linear-gradient(#eef4f9,#d3e6f5);border:1px solid #8fa8bc;overflow:hidden;padding:3px}
+#ptViewport .pt-viewport-node{display:block;position:absolute;width:8px;height:8px;border-radius:2px;background:#285c90;border:1px solid white;padding:0;min-width:0}
+#ptViewport .pt-viewport-node.selected{background:#f08a18;outline:1px solid #ab5310}
+#ptViewport .pt-viewport-node:hover{background:#1793d9;transform:scale(1.8);z-index:5}

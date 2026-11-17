@@ -1,0 +1,41 @@
+/* Compact simulation controls share the palette's sizing and visual treatment. */
+#timeStrip {
+ --control-height:calc(30px * var(--pt-global-scale));
+ position:relative;isolation:isolate;display:flex;flex-wrap:wrap;align-items:center;
+ gap:6px 12px;min-height:calc(42px * var(--pt-global-scale));padding:5px 9px;
+ border:1px solid #30678b;border-radius:10px;
+ background:linear-gradient(155deg,transparent 63%,#07568155 63.2%,#06345455 68%,transparent 68.2%),linear-gradient(180deg,#0b2a43 0%,#041525 55%,#061e33 100%);
+ box-shadow:inset 0 2px 4px #3a9fc333,inset 0 -3px 6px #0009;color:#f4f9ff;font-family:Arial,Helvetica,sans-serif;
+}
+#timeStrip .play-controls {display:flex;flex:0 1 auto;align-items:center;flex-wrap:wrap;min-width:0;max-width:100%;gap:5px;overflow:visible;white-space:normal;padding:0}
+#timeStrip .transport-controls {display:flex;flex:0 0 auto;align-items:center;gap:5px}
+#timeStrip .play-controls .clock-column {display:flex;flex:0 0 auto;align-items:center;justify-content:center;gap:6px;margin:0 4px 0 0;padding:5px 10px;min-height:var(--control-height);border-radius:22px;background:linear-gradient(#0b2940,#051321);box-shadow:inset 0 1px 8px #17608144;color:#a8bacb;font-size:calc(11px * var(--pt-global-scale));font-weight:700}
+#timeStrip #clock {display:block;width:13ch;overflow:hidden;white-space:nowrap;font:700 calc(14px * var(--pt-global-scale))/1.2 ui-monospace,monospace;font-variant-numeric:tabular-nums;letter-spacing:-.5px;color:#82f2ff;text-shadow:0 0 9px #00c8e530}
+#timeStrip button {display:inline-flex;align-items:center;justify-content:center;gap:6px;flex:0 0 auto;min-width:0;height:var(--control-height);padding:0 10px;border:1px solid #427b9c;border-radius:10px;background:linear-gradient(180deg,#173c55 0%,#071a2c 55%,#10334b 100%);box-shadow:inset 0 1px 3px #b5eaff33,inset 0 -2px 4px #0007,0 2px 4px #0006;color:#f3f7ff;font-size:calc(12px * var(--pt-global-scale));font-weight:700;line-height:1.15;white-space:nowrap;transition:border-color .12s,box-shadow .12s}
+#timeStrip button:hover:not(:disabled) {background:linear-gradient(#205572,#0b2940);border-color:#7bdff5}
+#timeStrip button:active:not(:disabled) {box-shadow:inset 0 2px 5px #0009}
+#timeStrip button:focus-visible {outline:3px solid #8efaff!important;outline-offset:2px}
+#timeStrip .control-icon {display:block;flex:0 0 auto;width:calc(19px * var(--pt-global-scale));height:calc(19px * var(--pt-global-scale));pointer-events:none;color:currentColor}
+#timeStrip .transport-controls>button:not(.round-control) {flex:0 0 auto;width:calc(34px * var(--pt-global-scale));height:var(--control-height);padding:0;border-radius:9px}
+#timeStrip #playBtn {color:#04e5ff}
+#timeStrip .play-controls .round-control {flex:0 0 auto;width:calc(28px * var(--pt-global-scale));height:var(--control-height);padding:0;margin:0;border:0;border-radius:0;background:transparent;box-shadow:none;color:#08edff}
+#timeStrip .round-control .control-icon {width:calc(24px * var(--pt-global-scale));height:calc(24px * var(--pt-global-scale))}
+#timeStrip .play-label {margin:0 4px 0 0;padding:0;font-size:calc(11px * var(--pt-global-scale));flex:0 0 auto}
+#timeStrip .pt-time-extra {display:flex;flex:0 1 auto;flex-wrap:wrap;align-items:center;gap:6px;max-width:100%;margin:0 0 0 5px;padding:0 0 0 9px;border-left:1px solid #29779c}
+#timeStrip .pt-time-extra button {width:auto;min-width:0;max-width:none;height:var(--control-height);padding:0 10px;border-radius:10px;font-size:calc(11px * var(--pt-global-scale));background:linear-gradient(#173c55,#071a2c 55%,#10334b);color:#f3f7ff;overflow:visible}
+#timeStrip .pt-time-extra .control-icon {color:#00e6ff}
+#timeStrip .mode-toggle {display:flex;flex:0 1 auto;flex-wrap:wrap;align-items:center;gap:6px;max-width:100%;margin-left:auto;padding:0 0 0 10px;border-left:1px solid #29779c}
+#timeStrip .mode-toggle button,#timeStrip .mode-toggle #eventListBtn {min-width:0;height:var(--control-height);padding:0 11px;border-radius:22px;font-size:calc(12px * var(--pt-global-scale))}
+#timeStrip .mode-toggle button.active {color:#fff;border-color:#29f6ff;background:linear-gradient(#087b92,#09617e 55%,#0799ad);box-shadow:inset 0 0 9px #00edff77,0 0 4px #00dfff99,0 0 10px #00cee533;text-shadow:0 1px 2px #002d40}
+@media(max-width:1100px) {
+ #timeStrip .play-controls {flex-basis:100%}
+ #timeStrip .mode-toggle {padding:0;border-left:0}
+}
+@media(prefers-reduced-motion:reduce) {#timeStrip button {transition:none}}
+@media(forced-colors:active) {
+ #timeStrip,#timeStrip button,#timeStrip .clock-column {background:Canvas;color:CanvasText;box-shadow:none}
+ #timeStrip #clock,#timeStrip .control-icon {color:CanvasText}
+ #timeStrip .mode-toggle button.active {border:2px solid Highlight;background:Highlight;color:HighlightText;box-shadow:none}
+ #timeStrip button:focus-visible {outline-color:Highlight!important}
+}
+body.pt-high-contrast #timeStrip button:focus-visible {outline-color:#ffff00!important}

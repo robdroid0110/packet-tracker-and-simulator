@@ -1,0 +1,22 @@
+{
+  "id": "fra",
+  "name": "Français",
+  "translations": {
+    "concept-arp": {
+      "title": "Suivre ARP et ICMP",
+      "instructions": "Activez le mode simulation. Envoyez un PDU simple de Client à Server et examinez les événements ARP et ICMP. Observez l’apprentissage des adresses MAC par le commutateur."
+    },
+    "skill-dhcp": {
+      "title": "Configurer un client DHCP",
+      "instructions": "Configurez le client pour obtenir une adresse de R1 par DHCP. Vérifiez le bail et la connectivité vers 192.168.50.1."
+    },
+    "design-addressing": {
+      "title": "Concevoir un plan d’adressage routé",
+      "instructions": "Choisissez deux sous-réseaux IPv4 sans chevauchement. Configurez R1, les deux hôtes et leurs passerelles, puis vérifiez la connectivité dans les deux sens."
+    },
+    "troubleshoot-link": {
+      "title": "Rétablir une liaison désactivée",
+      "instructions": "Client ne peut pas joindre Server. Examinez la topologie et les interfaces, identifiez et corrigez la panne, puis vérifiez la connexion."
+    }
+  }
+}

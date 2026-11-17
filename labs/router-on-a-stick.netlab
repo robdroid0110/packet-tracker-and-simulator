@@ -1,0 +1,23 @@
+# Inter-VLAN routing lab
+reset
+add pc PC10 80 80
+add pc PC20 80 260
+add switch SW1 330 170
+add router R1 590 170
+connect PC10 eth0 SW1 fa0/1
+connect PC20 eth0 SW1 fa0/2
+connect SW1 g0/1 R1 g0/0
+vlan SW1 10
+vlan SW1 20
+switchport SW1 fa0/1 access 10
+switchport SW1 fa0/2 access 20
+switchport SW1 g0/1 trunk 10,20
+ip PC10 eth0 192.168.10.10/24
+gateway PC10 192.168.10.1
+ip PC20 eth0 192.168.20.20/24
+gateway PC20 192.168.20.1
+subif R1 g0/0 10 192.168.10.1/24
+subif R1 g0/0 20 192.168.20.1/24
+ping PC10 192.168.20.20
+show routes R1
+show mac SW1

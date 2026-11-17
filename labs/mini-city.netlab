@@ -1,0 +1,67 @@
+# Packet Tracker agent-orchestration example: small routed city
+reset
+
+# Core
+add router CORE 560 250
+
+# Hospital zone
+add router HOSPITAL-R 150 120
+add switch HOSPITAL-SW 150 290
+add pc HOSPITAL-PC 60 430
+add server HOSPITAL-SRV 245 430
+connect CORE g0/0 HOSPITAL-R g0/0
+connect HOSPITAL-R g0/1 HOSPITAL-SW g0/1
+connect HOSPITAL-PC eth0 HOSPITAL-SW fa0/1
+connect HOSPITAL-SRV eth0 HOSPITAL-SW fa0/2
+ip CORE g0/0 10.255.0.1/30
+ip HOSPITAL-R g0/0 10.255.0.2/30
+ip HOSPITAL-R g0/1 10.10.0.1/24
+ip HOSPITAL-PC eth0 10.10.0.10/24
+gateway HOSPITAL-PC 10.10.0.1
+ip HOSPITAL-SRV eth0 10.10.0.20/24
+gateway HOSPITAL-SRV 10.10.0.1
+
+# School zone
+add router SCHOOL-R 560 70
+add switch SCHOOL-SW 560 410
+add pc SCHOOL-PC1 450 535
+add pc SCHOOL-PC2 650 535
+connect CORE g0/1 SCHOOL-R g0/0
+connect SCHOOL-R g0/1 SCHOOL-SW g0/1
+connect SCHOOL-PC1 eth0 SCHOOL-SW fa0/1
+connect SCHOOL-PC2 eth0 SCHOOL-SW fa0/2
+ip CORE g0/1 10.255.0.5/30
+ip SCHOOL-R g0/0 10.255.0.6/30
+ip SCHOOL-R g0/1 10.20.0.1/24
+ip SCHOOL-PC1 eth0 10.20.0.10/24
+gateway SCHOOL-PC1 10.20.0.1
+ip SCHOOL-PC2 eth0 10.20.0.11/24
+gateway SCHOOL-PC2 10.20.0.1
+
+# Office zone
+add router OFFICE-R 965 120
+add switch OFFICE-SW 965 290
+add pc OFFICE-PC1 875 430
+add pc OFFICE-PC2 1060 430
+connect CORE g0/2 OFFICE-R g0/0
+connect OFFICE-R g0/1 OFFICE-SW g0/1
+connect OFFICE-PC1 eth0 OFFICE-SW fa0/1
+connect OFFICE-PC2 eth0 OFFICE-SW fa0/2
+ip CORE g0/2 10.255.0.9/30
+ip OFFICE-R g0/0 10.255.0.10/30
+ip OFFICE-R g0/1 10.30.0.1/24
+ip OFFICE-PC1 eth0 10.30.0.10/24
+gateway OFFICE-PC1 10.30.0.1
+ip OFFICE-PC2 eth0 10.30.0.11/24
+gateway OFFICE-PC2 10.30.0.1
+
+# Dynamic routing
+ospf CORE enable
+ospf HOSPITAL-R enable
+ospf SCHOOL-R enable
+ospf OFFICE-R enable
+
+# Verification
+ping HOSPITAL-PC 10.30.0.10
+ping SCHOOL-PC1 10.10.0.20
+traceroute OFFICE-PC2 10.20.0.10

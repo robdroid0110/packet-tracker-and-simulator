@@ -1,0 +1,52 @@
+/* legacy network simulator Physical Workspace §19 — cable route editor */
+#ptPhysicalWorkspace .pt-cable-routes{position:absolute;top:0;left:0;z-index:4;pointer-events:none;overflow:visible}
+#ptPhysicalWorkspace .pt-cable-routes .pt-physical-cable-segment{
+ pointer-events:stroke;cursor:crosshair;transition:stroke-width .12s ease;
+}
+#ptPhysicalWorkspace .pt-cable-routes .pt-physical-cable-segment:hover{stroke-width:7}
+#ptPhysicalWorkspace .pt-cable-routes .pt-cable-bend-point{
+ fill:#1d1d1d;stroke:#fff;stroke-width:1.5;cursor:grab;pointer-events:all;touch-action:none
+}
+#ptPhysicalWorkspace .pt-cable-routes .pt-cable-group-point{
+ fill:#f3d441;stroke:#8e791c;stroke-width:2;cursor:grab;pointer-events:all;touch-action:none
+}
+#ptPhysicalWorkspace .pt-cable-routes .pt-cable-bend-point:active,
+#ptPhysicalWorkspace .pt-cable-routes .pt-cable-group-point:active{cursor:grabbing}
+#ptPhysicalWorkspace .pt-physical-map-device,#ptPhysicalWorkspace .pt-location{z-index:3}
+.pt-cable-menu{
+ position:fixed;z-index:260;width:223px;max-height:80vh;overflow:auto;
+ background:#f8fbfc;border:1px solid #7893a4;box-shadow:0 4px 15px #0005;
+ padding:7px;display:flex;gap:4px;flex-direction:column;font-size:11px;color:#253849
+}
+.pt-cable-menu strong,.pt-cable-menu small{overflow-wrap:anywhere;margin-bottom:3px}
+.pt-cable-menu button{padding:7px;text-align:left;background:#e9f0f7;border:1px solid #b6cad6;cursor:pointer;font-size:11px}
+.pt-cable-menu button:hover{background:#c7e6f7}
+.pt-cable-menu input[type=color]{width:100%;height:32px}
+#ptPhysicalWorkspace .pt-cable-panel{
+ position:absolute;left:10px;bottom:10px;width:min(380px,65vw);max-height:52vh;
+ z-index:28;background:#f0f5f8;border:1px solid #8099ac;color:#223c52;
+ border-radius:4px;box-shadow:0 2px 15px #0003;font-size:11px;overflow:auto
+}
+#ptPhysicalWorkspace .pt-cable-panel>summary{
+ cursor:pointer;position:sticky;top:0;background:#325775;color:white;
+ padding:8px 10px;font-weight:600;z-index:1
+}
+#ptPhysicalWorkspace .pt-cable-panel-body{padding:8px}
+#ptPhysicalWorkspace .pt-cable-note{font-size:11px;line-height:1.45}
+#ptPhysicalWorkspace .pt-cable-panel-item{
+ display:flex;gap:5px;flex-wrap:wrap;align-items:center;border-top:1px solid #c4d4df;
+ padding:7px 3px
+}
+#ptPhysicalWorkspace .pt-cable-panel-item>span{flex:1;min-width:90px;overflow-wrap:anywhere}
+#ptPhysicalWorkspace .pt-cable-panel-item strong{white-space:nowrap;font-size:10px}
+#ptPhysicalWorkspace .pt-cable-panel-item button,
+#ptPhysicalWorkspace .pt-cable-undo-controls button{font-size:10px;padding:4px 7px}
+#ptPhysicalWorkspace .pt-cable-undo-controls{display:flex;gap:5px;justify-content:flex-end;margin-top:7px}
+#ptPhysicalWorkspace .pt-bend-list-item{max-width:100%}
+#ptCableFeedback{color:#45616b;line-height:1.4;min-height:12px}
+@media(max-width:650px){
+ #ptPhysicalWorkspace .pt-cable-panel{width:min(340px,90vw);left:5px;max-height:42vh}
+ #ptPhysicalWorkspace .pt-cable-panel>summary{padding:6px;font-size:10px}
+}
+
+#ptPhysicalWorkspace .pt-cable-routes .pt-cable-hit{stroke:transparent;stroke-width:16;pointer-events:stroke;cursor:crosshair}

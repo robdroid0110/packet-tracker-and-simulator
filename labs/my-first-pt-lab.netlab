@@ -1,0 +1,20 @@
+# My First Packet Tracer Lab — deterministic Packet Tracker reproduction.
+# Execute against a disposable/empty lab: ./netlab batch labs/my-first-pt-lab.netlab
+add pc Client 220 220
+add server WebServer 580 220
+# The training exercise first demonstrates an incorrect straight-through cable.
+connect Client eth0 WebServer eth0 copper-straight
+show links
+disconnect Client eth0
+connect Client eth0 WebServer eth0 copper-cross
+ip Client eth0 192.168.0.110/24
+ip WebServer eth0 192.168.0.105/24
+dns-client Client 192.168.0.105
+dns-service WebServer on
+dns-add WebServer www.firstlab.com 192.168.0.105
+http-service WebServer on
+show links
+pdu Client WebServer
+web-get Client www.firstlab.com
+show packet-events
+show arp Client

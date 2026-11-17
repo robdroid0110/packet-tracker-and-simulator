@@ -1,0 +1,13 @@
+# Router DHCP lab
+reset
+add pc PC1 80 120
+add switch SW1 330 120
+add router R1 590 120
+connect PC1 eth0 SW1 fa0/1
+connect SW1 fa0/2 R1 g0/0
+ip R1 g0/0 192.168.50.1/24
+dhcp-pool R1 LAN 192.168.50.0/24 192.168.50.1 192.168.50.100 192.168.50.120 1.1.1.1
+dhcp PC1 eth0
+show interfaces PC1
+show dhcp R1
+ping PC1 192.168.50.1

@@ -1,0 +1,32 @@
+{
+  "projects": [
+    {
+      "name": "campus",
+      "devices": 16,
+      "links": 17,
+      "commands": 78,
+      "actions": 0,
+      "checks": "passed",
+      "lab": "labs/audit/campus.json"
+    },
+    {
+      "name": "branch",
+      "devices": 11,
+      "links": 10,
+      "commands": 44,
+      "actions": 10,
+      "checks": "passed",
+      "lab": "labs/audit/branch.json"
+    },
+    {
+      "name": "industrial",
+      "devices": 10,
+      "links": 9,
+      "commands": 30,
+      "actions": 7,
+      "checks": "passed",
+      "lab": "labs/audit/industrial.json"
+    }
+  ],
+  "findings": []
+}

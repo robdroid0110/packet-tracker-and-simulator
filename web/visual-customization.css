@@ -1,0 +1,32 @@
+/* legacy simulator §18 portable images and physical backgrounds */
+#ptVisualDialog[hidden]{display:none!important}
+#ptVisualDialog{position:fixed;inset:0;z-index:350;background:#182838b8;display:grid;place-items:center;padding:12px}
+.pt-visual-window{width:min(620px,96vw);max-height:min(760px,95vh);display:flex;flex-direction:column;overflow:hidden;background:#eff3f6;color:#213446;border:1px solid #8aa1b0;box-shadow:0 14px 45px #0007;font:12px Arial,sans-serif}
+.pt-visual-window header{display:flex;align-items:center;background:#254b70;color:white;gap:8px;padding:9px 12px}
+.pt-visual-window header strong{flex:1}
+.pt-visual-window header button{font-size:18px;line-height:1;border:0;color:#fff;background:transparent;padding:4px 8px}
+.pt-visual-body{padding:14px;overflow:auto;min-height:0;display:flex;flex-direction:column;gap:10px}
+.pt-visual-body>label{display:flex;flex-wrap:wrap;gap:9px;align-items:center;justify-content:space-between}
+.pt-visual-body>label>select,.pt-visual-body>label>input[type=file]{flex:1;min-width:175px;max-width:100%;font-size:12px}
+.pt-visual-preview{min-height:130px;max-height:265px;background:#e0e7ed;border:1px dashed #9bb5c3;display:flex;align-items:center;justify-content:center;padding:8px;overflow:hidden}
+#ptVisualPreview{max-width:100%;max-height:245px;object-fit:contain}
+#ptVisualPreview[hidden],#ptVisualDefault[hidden],#ptVisualBackgroundOptions[hidden]{display:none!important}
+#ptVisualDefault{color:#738593}
+#ptVisualBackgroundOptions{display:flex;flex-direction:column;gap:9px;border-top:1px solid #b7c7d1;padding-top:9px}
+#ptVisualBackgroundOptions label{display:flex;align-items:center;gap:8px}
+#ptVisualScale{font-family:Consolas,monospace;font-size:11px}
+.pt-visual-hint{margin:0;color:#536778;line-height:1.5}
+#ptVisualError{font-size:12px;font-weight:600;min-height:14px;color:#ae3033;margin:0}
+.pt-visual-window footer{padding:9px 12px;display:flex;gap:8px;justify-content:flex-end;background:#e2eaf0;border-top:1px solid #b2c5d1}
+.pt-visual-window footer button{min-width:85px;padding:7px 11px}
+.pt-visual-window footer #ptVisualReset{margin-right:auto}
+#ptVisualDialog button:focus-visible,#ptVisualDialog :is(input,select):focus-visible{outline:2px solid #b16a16;outline-offset:2px}
+#ptPhysicalWorkspace .pt-map-cards{background-position:center}
+#ptPhysicalWorkspace .pt-location,#ptPhysicalWorkspace .pt-physical-map-device{position:absolute}
+@media(max-width:560px){
+ .pt-visual-window{width:100%;max-height:95vh}
+ .pt-visual-body{padding:9px}
+ .pt-visual-window footer button{min-width:64px}
+}
+
+@media(max-width:560px){.pt-visual-window footer{flex-wrap:wrap}.pt-visual-window footer button{font-size:11px;padding:6px 8px}}

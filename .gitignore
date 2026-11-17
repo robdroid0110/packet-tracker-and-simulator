@@ -1,0 +1,39 @@
+
+labs/autosave.json
+labs/autosave.before-preferences-*.json
+labs/backups/
+# Third-party desktop artwork is private; never commit
+netlab.log
+__pycache__/
+*.py[cod]
+research/*-evidence.json
+research/packettracer-extracted/
+research/*.png
+web/assets/icons/
+# Locally generated desktop build artifacts
+dist/
+build/
+*.spec
+
+# Local Linux packaging environment
+.build-env/
+
+web/vendor/
+
+# User-specific local JSON labs must never be published by accident
+labs/*.json
+
+
+# Confidential local files and generated developer datasets
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*credentials*
+*secrets*
+*token-cache*
+research/performance/*.json
+research/*-evidence.json
+*.log

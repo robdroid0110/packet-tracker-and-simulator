@@ -1,0 +1,106 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+from pathlib import Path
+import json
+import os
+import subprocess
+import sys
+import urllib.request
+
+ROOT = Path(__file__).resolve().parent
+BASE = os.environ.get("PACKET_TRACKER_URL", os.environ.get("NETLAB_URL", "http://127.0.0.1:8765"))
+
+
+def request_json(path: str, payload: dict | None = None) -> dict:
+    data = None if payload is None else json.dumps(payload).encode()
+    req = urllib.request.Request(
+        BASE + path,
+        data=data,
+        headers={"content-type": "application/json"} if data is not None else {},
+        method="POST" if data is not None else "GET",
+    )
+    with urllib.request.urlopen(req, timeout=30) as r:
+        return json.load(r)
+
+
+def api(command: str) -> str:
+    return request_json("/api/command", {"command": command}).get("output", "")
+
+
+def command_lines(path: Path) -> list[str]:
+    out = []
+    for raw in path.read_text().splitlines():
+        line = raw.strip()
+        if line and not line.startswith("#"):
+            out.append(line)
+    return out
+
+
+def run_batch(commands: list[str], stop_on_error: bool = True) -> dict:
+    return request_json("/api/batch", {"commands": commands, "stop_on_error": stop_on_error})
+
+
+def print_batch(result: dict) -> None:
+    for item in result.get("results", []):
+        mark = "OK" if item.get("ok") else "ERROR"
+        print(f"[{mark}] {item.get('command', '')}")
+        output = item.get("output", "")
+        if output:
+            print(output)
+    print(f"executed {result.get('executed', 0)}/{result.get('requested', 0)} commands")
+
+
+def usage() -> None:
+    print("usage: netlab serve|shell|exec <command>|run <file>|batch <file>|capabilities [target]|manual|state|open")
+
+
+def main():
+    if len(sys.argv) < 2:
+        usage(); raise SystemExit(2)
+    cmd = sys.argv[1]
+    if cmd == "serve":
+        os.execv(sys.executable, [sys.executable, str(ROOT / "server.py"), *sys.argv[2:]])
+    if cmd == "open":
+        subprocess.Popen(["xdg-open", BASE])
+        return
+    if cmd == "exec":
+        if len(sys.argv) < 3: raise SystemExit("netlab exec requires a command")
+        print(api(" ".join(sys.argv[2:])))
+        return
+    if cmd in {"capabilities", "describe"}:
+        target = " ".join(sys.argv[2:]).strip()
+        print(api("capabilities" + (f" {target}" if target else "")))
+        return
+    if cmd == "manual":
+        print(json.dumps(request_json("/api/capabilities"), indent=2))
+        return
+    if cmd == "state":
+        print(json.dumps(request_json("/api/state"), indent=2))
+        return
+    if cmd == "run":
+        if len(sys.argv) != 3: raise SystemExit("netlab run requires a command file")
+        for line in command_lines(Path(sys.argv[2])):
+            print(f"tracker> {line}")
+            print(api(line))
+        return
+    if cmd == "batch":
+        if len(sys.argv) != 3: raise SystemExit("netlab batch requires a command file")
+        result = run_batch(command_lines(Path(sys.argv[2])))
+        print_batch(result)
+        raise SystemExit(0 if result.get("ok") else 1)
+    if cmd == "shell":
+        print("Packet Tracker and Simulator agent shell. Type 'help', 'capabilities', or Ctrl-D to exit.")
+        while True:
+            try: line = input("tracker> ")
+            except (EOFError, KeyboardInterrupt): print(); break
+            if line.strip() in {"exit", "quit"}: break
+            try: print(api(line))
+            except Exception as e: print(f"ERROR: {e}")
+        return
+    usage()
+    raise SystemExit(f"unknown command: {cmd}")
+
+
+if __name__ == "__main__":
+    main()

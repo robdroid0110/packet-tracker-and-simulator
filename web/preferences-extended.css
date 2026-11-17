@@ -1,0 +1,39 @@
+/* Implemented Preferences extensions; styling kept separate from vendor read-only reference. */
+.pt-prefs-window{width:min(980px,98vw);height:min(840px,96vh)}
+.pt-prefs-tabs [data-pref-tab=profile]{display:none!important}
+.pt-prefs-body{padding:12px 16px}
+.pt-prefs-page fieldset{background:transparent}
+.pt-x-tree{border:1px solid #d0d0d0;padding:8px;margin-top:8px}
+.pt-prefs-page [data-ptex=theme]{min-width:200px}
+.pt-theme-dark .pt-prefs-page fieldset{border-color:#637284}
+#ptXBackups{max-height:155px;overflow:auto;margin:9px 0;padding:7px;border:1px solid #bbb;background:#fafafa;line-height:1.4}
+.pt-x-backup-row{display:flex;justify-content:space-between;align-items:center;gap:8px;border-top:1px solid #ddd;padding:5px 2px}
+.pt-x-backup-row:first-of-type{border-top:0}
+.pt-x-backup-row span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pt-x-backup-row button{flex:none}
+.pt-prefs-page input[type=color]{width:38px;height:26px;padding:1px;cursor:pointer}
+.pt-prefs-page input[type=number]{max-width:75px;padding:4px}
+.pt-prefs-page button{padding:5px 8px}
+.pt-hide-multiuser #mainCategories [data-category=multiuser]{display:none}
+#ptTooltip{font-family:var(--pt-tip-font,Arial,sans-serif);font-size:var(--pt-tip-size,12px)}
+#deviceCliOut,#deviceCliIn,.cli-screen,.cli-form input{font-family:var(--pt-cli-family,Consolas,monospace);color:var(--pt-iosText,#eaeaea);background:var(--pt-iosBg,#050505)}
+.pc-command-screen,.pc-command-form,.pc-command-form input{font-family:var(--pt-cli-family,Consolas,monospace);color:var(--pt-pcText,#ddd);background:var(--pt-pcBg,#020202)}
+body.pt-theme-dark{--text:#e2e7ee;--chrome:#293340;--chrome2:#222b36;--border:#546171;--border-dark:#6e7c8b;--canvas:#222d39;color:#e2e7ee;background:#1b2530}
+.pt-theme-dark #menuBar,.pt-theme-dark .toolbar,.pt-theme-dark #statusBar,.pt-theme-dark #categoryColumn,.pt-theme-dark #subPalette,.pt-theme-dark #deviceTray,.pt-theme-dark #paletteRow,.pt-theme-dark #rightDock,.pt-theme-dark #scenarioPane,.pt-theme-dark #simulationPanel,.pt-theme-dark .pt-prefs-window,.pt-theme-dark .pt-prefs-title,.pt-theme-dark .pt-prefs-footer,.pt-theme-dark .dialog-window,.pt-theme-dark .dialog-title,.pt-theme-dark .dialog-tabs,.pt-theme-dark #dialogBody{background:#2d3641;color:#e5e9ef}
+.pt-theme-dark #pduPane,.pt-theme-dark #eventList,.pt-theme-dark #paletteStatus,.pt-theme-dark #simulationEvents,.pt-theme-dark .pt-prefs-body,.pt-theme-dark .pt-prefs-page fieldset,.pt-theme-dark .pt-config-frame,.pt-theme-dark .pt-doc-section,.pt-theme-dark .device-main,.pt-theme-dark .service-main{background:#27313c;color:#e5e9ef}
+.pt-theme-dark button,.pt-theme-dark .toolbar button,.pt-theme-dark .category,.pt-theme-dark .subtype,.pt-theme-dark .palette-device,.pt-theme-dark .dialog-tabs button,.pt-theme-dark .pt-prefs-tabs button{background:#364453;color:#e6ecf3;border-color:#657180}
+.pt-theme-dark button:hover:not(:disabled),.pt-theme-dark .palette-device:hover,.pt-theme-dark .category.active,.pt-theme-dark .subtype.active,.pt-theme-dark .pt-prefs-tabs button.active{background:#355e75;color:#fff}
+.pt-theme-dark .pt-prefs-page p,.pt-theme-dark .app-title,.pt-theme-dark .node .ipline{color:#b5c0cc}
+.pt-theme-dark input,.pt-theme-dark textarea,.pt-theme-dark select,.pt-theme-dark #paletteSearch{background:#202a35;color:#f0f3f5;border-color:#647486}
+.pt-theme-dark #ptXBackups{background:#23303c;border-color:#5a6a7d}
+.pt-theme-dark #workspace{background:var(--canvas)}
+.pt-theme-dark .wire-label{fill:#d9e7f5}
+.pt-theme-dark .pt-options-menu{background:#303944;color:#eef2f6}
+@media(max-width:650px){
+ .pt-prefs-overlay{padding:4px}
+ .pt-prefs-window{width:100%;height:95dvh;min-height:0;grid-template-rows:32px 39px minmax(0,1fr) 48px}
+ .pt-prefs-body{margin:0 4px 4px;padding:8px}
+ .pt-prefs-tabs button{padding:4px 8px}
+ .pt-prefs-footer{gap:4px;padding:4px}
+ .pt-prefs-footer button{min-width:0;padding:5px}
+}

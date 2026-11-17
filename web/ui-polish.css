@@ -1,0 +1,47 @@
+/* Workspace and device layouts share the same rules in browser and desktop. */
+.node{touch-action:none}
+.node img{-webkit-user-drag:none;user-select:none}
+#bottomDock{grid-template-rows:auto minmax(0,1fr)}
+#timeStrip{flex-wrap:wrap;gap:4px 10px;min-height:38px}
+#timeStrip .play-controls{max-width:100%;overflow-x:auto;scrollbar-width:thin;flex:0 1 auto;padding-block:2px}
+#timeStrip .mode-toggle{margin-left:auto}
+#timeStrip .play-controls>*,#timeStrip .mode-toggle>*{flex-shrink:0}
+#timeStrip .pt-time-extra{margin-right:0}
+#toolRail,#mainToolbar,#workspaceTabs{min-width:0}
+#toolRail{overflow-x:auto;scrollbar-width:thin}
+#toolRail>button,#mainToolbar>button{flex-shrink:0}
+.dialog-window{min-width:0;grid-template-columns:minmax(0,1fr)}
+.dialog-title,.dialog-tabs,#dialogBody{min-width:0}
+.dialog-title strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dialog-tabs{overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}
+.dialog-tabs button{flex:0 0 auto;white-space:nowrap}
+#dialogBody:has(#deviceCliScreen){padding:0;overflow:hidden}
+#deviceCliScreen{height:100%;min-height:0;padding:12px;white-space:normal;font-size:var(--pt-cli-size,12px)}
+#deviceCliOut{white-space:pre-wrap;overflow-wrap:anywhere}
+#deviceCliScreen .cli-form{padding:0;min-height:1.5em;align-items:baseline}
+#deviceCliScreen .cli-form span{white-space:pre-wrap;margin:0 .4ch 0 0}
+#deviceCliIn{min-width:0;padding:0;line-height:inherit;font:inherit;caret-color:currentColor}
+#deviceCliIn:focus-visible{outline:none!important;box-shadow:none}
+#deviceCliScreen:focus-within{box-shadow:inset 2px 0 #0079b8}
+body.pt-high-contrast #deviceCliScreen:focus-within{box-shadow:inset 3px 0 #ffff00}
+.pt-fallback-icon{display:grid;place-items:center;min-width:24px;min-height:24px;font:700 16px/1 Arial,sans-serif;white-space:nowrap;pointer-events:none}
+.palette-device .pt-fallback-icon{height:40px;font-size:17px;color:#174967}
+@media(max-width:1100px){
+ :root{--bottom-height:220px}
+ #timeStrip .play-controls{flex-basis:100%}
+ #timeStrip .mode-toggle{padding-bottom:2px}
+}
+@media(max-width:1000px){
+ :root{--pdu-width:300px}
+ #rightDock{grid-template-columns:132px minmax(0,1fr)}
+ #scenarioPane .pdu-toggle{white-space:normal;height:auto;min-height:29px}
+ #shellPane{left:8px;right:8px}
+}
+@media(max-width:600px){
+ :root{--palette-left:155px;--pdu-width:210px}
+ #workspaceTabs{overflow-x:auto;gap:10px;scrollbar-width:thin}
+ #workspaceTabs>*{flex-shrink:0}
+ .pt-config-frame .pt-doc-layout{grid-template-columns:110px minmax(0,1fr)}
+ .pt-main-panel{padding:6px}
+ .pt-doc-section{padding:8px}
+}

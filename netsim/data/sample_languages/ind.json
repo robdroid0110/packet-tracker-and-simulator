@@ -1,0 +1,22 @@
+{
+  "id": "ind",
+  "name": "Bahasa Indonesia",
+  "translations": {
+    "concept-arp": {
+      "title": "Lacak ARP dan ICMP",
+      "instructions": "Masuk ke mode Simulasi. Kirim PDU sederhana dari Client ke Server dan amati peristiwa ARP dan ICMP serta pembelajaran alamat MAC oleh switch."
+    },
+    "skill-dhcp": {
+      "title": "Konfigurasi klien DHCP",
+      "instructions": "Atur klien agar memperoleh alamat dari R1 melalui DHCP. Periksa lease dan konektivitas ke 192.168.50.1."
+    },
+    "design-addressing": {
+      "title": "Rancang pengalamatan terarah",
+      "instructions": "Pilih dua subnet IPv4 yang tidak tumpang tindih. Konfigurasikan R1, kedua host dan gateway default, lalu uji konektivitas dua arah."
+    },
+    "troubleshoot-link": {
+      "title": "Perbaiki tautan yang dinonaktifkan",
+      "instructions": "Client tidak dapat mencapai Server. Periksa topologi dan antarmuka, temukan dan perbaiki masalah, lalu uji koneksi."
+    }
+  }
+}

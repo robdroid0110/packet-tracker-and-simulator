@@ -1,0 +1,44 @@
+/* Physical Workspace Navigation — vendor Help §16 */
+#ptPhysicalNavDialog[hidden],#ptMoveObjectHint[hidden]{display:none!important}
+#ptPhysicalNavDialog{position:fixed;inset:0;z-index:245;background:#16283baf;display:grid;place-items:center;padding:3vh 2vw}
+.pt-physical-nav-window{width:min(1060px,97vw);height:min(790px,92vh);background:#f1f4f7;color:#1e3142;border:1px solid #8298ac;display:flex;flex-direction:column;box-shadow:0 15px 45px #0006;font-size:12px;min-width:0}
+.pt-physical-nav-window header,.pt-physical-nav-window footer{display:flex;align-items:center;gap:10px;padding:8px 12px;flex:none}
+.pt-physical-nav-window header{background:#254b70;color:white}
+.pt-physical-nav-window header strong{flex:1;font-size:13px}
+.pt-physical-nav-window header button,.pt-physical-nav-window footer button,.pt-physical-nav-toolbar button{padding:5px 10px}
+.pt-physical-nav-window footer{background:#e6ebf0;border-top:1px solid #bac9d5}
+#ptNavStatus{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#ptNavStatus.error{color:#ae2334;font-weight:600}
+.pt-physical-nav-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:6px;background:#dbe8f3;padding:7px 12px;border-bottom:1px solid #b5c9d6}
+#ptNavPicked{flex:1;font-size:11px;max-height:40px;overflow:auto}
+.pt-physical-nav-tree{flex:1;overflow:auto;padding:14px;background:#fff}
+.pt-nav-branch{margin:2px 0 2px 15px}
+.pt-nav-branch:first-child{margin-left:0}
+.pt-nav-location-row{display:flex;align-items:center;gap:6px;min-height:32px;padding:3px 8px;border:1px solid #bdd0da;background:#e2edf5;border-radius:3px;cursor:grab}
+.pt-nav-location-row:hover,.pt-nav-location-row:focus-within{background:#cce4f3}
+.pt-nav-location-row.selected{background:#b5d8ee;border:2px solid #528bad}
+.pt-nav-place-label{flex:1;font-weight:600;min-width:75px;overflow:hidden;text-overflow:ellipsis}
+.pt-nav-location-row button{flex:none;font-size:11px;padding:4px 7px}
+.pt-nav-device-row{display:flex;gap:7px;align-items:center;padding:5px 10px 5px 29px;border-bottom:1px dotted #d2dee8;min-height:28px;cursor:grab}
+.pt-nav-device-row:hover{background:#eff6fa}
+.pt-nav-device-row input{cursor:pointer;margin:0 5px 0 0}
+.pt-nav-device-row span{white-space:normal;overflow-wrap:anywhere}
+#ptMoveObjectHint{position:absolute;left:15px;top:53px;z-index:90;padding:10px 13px;border:2px solid #f0a729;background:#fff5df;color:#49360b;font-size:12px;display:flex;align-items:center;gap:12px;max-width:70%;box-shadow:0 3px 10px #0004}
+#ptMoveObjectHint button{font-size:11px;padding:4px 9px}
+body.pt-move-object-armed #ptPhysicalWorkspace .pt-location,
+body.pt-move-object-armed #ptPhysicalWorkspace .pt-map-device-open,
+body.pt-move-object-armed #ptPhysicalWorkspace .pt-rack-device{outline:2px dashed #e0a034;outline-offset:2px;cursor:crosshair}
+#ptPhysicalNavDialog :is(button,input):focus-visible{outline:2px solid #dc8d2b;outline-offset:2px}
+@media(max-width:700px){
+ #ptPhysicalNavDialog{padding:1vh 1vw}
+ .pt-physical-nav-window{width:99vw;height:97vh}
+ .pt-physical-nav-tree{padding:5px}
+ .pt-nav-location-row{flex-wrap:wrap}
+ .pt-nav-place-label{flex-basis:100%}
+ .pt-physical-nav-toolbar button{padding:4px 6px}
+ #ptMoveObjectHint{max-width:85%;top:80px}
+}
+/* Physical cable spanning location boundaries, drawn behind location cards. */
+#ptPhysicalWorkspace .pt-city-cables{position:absolute;left:0;top:0;overflow:visible;pointer-events:none;z-index:0}
+#ptPhysicalWorkspace .pt-location{z-index:1}
+#ptPhysicalWorkspace .pt-city-cables text{font:11px Arial,sans-serif;fill:#2d3644;paint-order:stroke;stroke:#fff;stroke-width:3px}

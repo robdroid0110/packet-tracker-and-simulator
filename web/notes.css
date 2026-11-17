@@ -1,0 +1,6 @@
+/* Logical workspace annotations from legacy network simulator workspace_logical.htm */
+#workspaceNotes{position:absolute;inset:0;pointer-events:none;z-index:4}
+.workspace-note{position:absolute;min-width:85px;max-width:240px;min-height:35px;padding:7px 9px;background:#fff6b8;border:1px solid #c9ae52;box-shadow:1px 2px 2px #0002;color:#28251b;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.35 Arial,sans-serif;cursor:grab;pointer-events:auto;user-select:none}
+.workspace-note:hover{border-color:#967419;box-shadow:1px 2px 4px #0004}
+.workspace-note:active{cursor:grabbing}
+.pt-no-animation .workspace-note{transition:none}

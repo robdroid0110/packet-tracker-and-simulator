@@ -1,0 +1,22 @@
+{
+  "id": "por",
+  "name": "Português",
+  "translations": {
+    "concept-arp": {
+      "title": "Rastrear ARP e ICMP",
+      "instructions": "Entre no modo de simulação. Envie um PDU simples de Client para Server e acompanhe os eventos ARP e ICMP. Observe o aprendizado de endereços MAC pelo switch."
+    },
+    "skill-dhcp": {
+      "title": "Configurar cliente DHCP",
+      "instructions": "Configure o cliente para obter um endereço de R1 por DHCP. Verifique a concessão e a conectividade com 192.168.50.1."
+    },
+    "design-addressing": {
+      "title": "Projetar endereçamento roteado",
+      "instructions": "Escolha duas sub-redes IPv4 que não se sobreponham. Configure R1, os dois hosts e os gateways padrão e verifique a conectividade nos dois sentidos."
+    },
+    "troubleshoot-link": {
+      "title": "Restaurar enlace desativado",
+      "instructions": "Client não alcança Server. Examine a topologia e as interfaces, identifique e corrija a falha e teste a conectividade."
+    }
+  }
+}

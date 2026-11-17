@@ -1,0 +1,88 @@
+/* Reference treatment for the existing top rows and right simulation sidebar. */
+#menuBar,.toolbar,#workspaceTabs {
+ background:linear-gradient(155deg,transparent 72%,#07547d66 72.2%,#06304b44 78%,transparent 78.2%),linear-gradient(#082b43,#021b2d 70%);
+ border-color:#13516f;color:#eff9ff;box-shadow:inset 0 1px 3px #38c2f222;
+}
+#menuBar {min-width:0;overflow-x:auto;scrollbar-width:thin}
+#menuBar .menu-item {color:#eff9ff;border-radius:5px;flex-shrink:0}
+#menuBar .menu-item:hover {background:#155674}
+#menuBar .app-title {color:#f2f9ff;white-space:nowrap}
+#menuBar #health {color:#83f8d5;white-space:nowrap}
+#mainToolbar,#toolRail {border-radius:8px;overflow-x:auto;scrollbar-width:thin}
+#mainToolbar button,#toolRail button,#workspaceTabs .workspace-right button,#ptWorkspaceListButton {
+ border:1px solid #317a9a;border-radius:7px;background:linear-gradient(#174965,#052339 62%,#0e3c55);color:#ecf9ff;
+ box-shadow:inset 0 1px 2px #91eaff33,0 1px 2px #0006;
+}
+#mainToolbar button:hover:not(:disabled),#toolRail button:hover:not(:disabled),#workspaceTabs button:hover:not(:disabled) {background:linear-gradient(#1d5e7c,#09344d);border-color:#69e3f6}
+#mainToolbar .agent-shell-button {border-color:#13e9f2!important;background:linear-gradient(#08728c,#034055)!important;color:#efffff;box-shadow:inset 0 0 4px #03efff77,0 0 4px #04e5ff44}
+#mainToolbar button:disabled,#toolRail button:disabled {opacity:.45}
+#mainToolbar .sep,#toolRail .sep {background:#28708a;flex-shrink:0}
+#mainToolbar .tb-icon.svg,#workspaceTabs .workspace-right button img {filter:brightness(0) invert(1)}
+#toolRail button.active {border-color:#3bdff5;background:linear-gradient(#156581,#062e44)}
+#workspaceTabs .workspace-tab {background:linear-gradient(#154b6c,#06283d);border-color:#4593b2;box-shadow:inset 0 1px 2px #91eaff33}
+#workspaceTabs .workspace-tab.active {background:linear-gradient(#16c8d7,#08718c 60%,#0692ab);border-color:#3ff6ff;box-shadow:inset 0 0 7px #03ffff55,0 0 4px #00d9ff44}
+#workspaceTabs .coordinates {color:#deeff9}
+#ptWorkspaceListButton {padding:2px 8px}
+#workspaceTabs .workspace-right .crumb {color:#eff9ff}
+#workspaceTabs .workspace-right .pt-nav-text {color:#eff9ff}
+#workspace {border:1px solid #23718b;border-radius:8px;background:#fafcfd}
+#workspace .workspace-scrollbar {background:#082c43;scrollbar-color:#02d5e7 #113d57}
+#mainToolbar button:focus-visible,#toolRail button:focus-visible,#menuBar button:focus-visible,#workspaceTabs button:focus-visible {outline-color:#89f7ff!important}
+
+#simulationPanel {
+ --sim-event-columns:minmax(25px,.55fr) minmax(54px,1.2fr) minmax(0,1.4fr) minmax(0,1.4fr) minmax(40px,.85fr);
+ position:absolute;right:16px;top:5px;bottom:18px;
+ width:min(calc(100% - 20px),calc(clamp(310px,24vw,470px) * var(--pt-global-scale)));
+ min-width:0;min-height:0;display:flex;flex-direction:column;gap:6px;padding:5px;
+ border:1px solid #17bbd5;border-radius:10px;background:linear-gradient(155deg,#062c41,#011b2d 65%);color:#eaf6ff;
+ box-shadow:inset 0 1px 4px #18d5f355,-2px 0 5px #00283b66;overflow-x:hidden;overflow-y:auto;
+ scrollbar-width:thin;scrollbar-color:#09cde3 #103c54;font-size:calc(13px * var(--pt-global-scale));
+}
+#simulationPanel.hidden {display:none}
+#simulationPanel .control-icon {width:calc(20px * var(--pt-global-scale));height:calc(20px * var(--pt-global-scale));flex:0 0 auto;pointer-events:none;color:#70edff}
+#simulationPanel .sim-panel-title {flex:0 0 auto;gap:8px;min-width:0;padding:2px 5px 5px;border:0;background:transparent;color:#f0f9ff;font-size:calc(14px * var(--pt-global-scale))}
+#simulationPanel .sim-panel-title strong {min-width:0;overflow-wrap:anywhere}
+#simulationPanel button {display:inline-flex;align-items:center;justify-content:center;gap:7px;min-width:0;min-height:calc(30px * var(--pt-global-scale));padding:5px 8px;border:1px solid #408bac;border-radius:9px;background:linear-gradient(#155071,#062a42 65%,#083450);color:#eef9ff;box-shadow:inset 0 1px 2px #77dcff44;font-size:calc(12px * var(--pt-global-scale));line-height:1.25;white-space:normal;overflow-wrap:anywhere}
+#simulationPanel button:hover:not(:disabled) {border-color:#7df2ff;background:linear-gradient(#1a6883,#07384d)}
+#simulationPanel button:focus-visible,#simulationPanel input:focus-visible {outline:2px solid #8bf8ff!important;outline-offset:-3px}
+#simulationPanel #simPanelClose {width:calc(24px * var(--pt-global-scale));height:calc(24px * var(--pt-global-scale));min-height:0;flex:0 0 auto;padding:1px;border-radius:6px}
+#simulationPanel .sim-event-section,#simulationPanel .sim-play-section,#simulationPanel .sim-filter-section {min-width:0;border:1px solid #176583;border-radius:9px;background:linear-gradient(#072b42,#021c2e);box-shadow:inset 0 1px 4px #0fc3f322;overflow:hidden}
+#simulationPanel .sim-event-section {display:grid;grid-template-rows:max-content max-content minmax(95px,1fr);flex:1 0 calc(165px * var(--pt-global-scale));min-height:calc(165px * var(--pt-global-scale))}
+#simulationPanel .sim-event-title,#simulationPanel .sim-play-title,#simulationPanel .sim-filter-title {display:flex;align-items:center;gap:6px;padding:6px 8px;margin:0;min-width:0;height:auto;border:0;border-bottom:1px solid #16516c;background:linear-gradient(#0b3b58,#031f33);color:#f1f9ff;font-size:calc(13px * var(--pt-global-scale));font-weight:600;line-height:1.3;overflow-wrap:anywhere}
+#simulationPanel .sim-event-head,#simulationPanel .sim-event-row {grid-template-columns:var(--sim-event-columns);min-width:0;background:transparent;border-color:#235c76;color:#eaf6ff}
+#simulationPanel .sim-event-head {background:linear-gradient(#0d3c59,#062940)}
+#simulationPanel .sim-event-head span {min-width:0;padding:5px 3px;border-color:#235c76;font-size:calc(10px * var(--pt-global-scale));white-space:normal;overflow-wrap:anywhere}
+#simulationPanel #simulationEvents {min-width:0;min-height:0;background:transparent;overflow:auto;scrollbar-color:#04d7e6 #123e55;scrollbar-width:thin}
+#simulationPanel .sim-event-row {display:grid;width:100%;justify-content:normal;gap:0;min-height:calc(27px * var(--pt-global-scale));padding:0;border-width:0 0 1px 4px;border-radius:0;box-shadow:none;text-align:left;background:#062a40}
+#simulationPanel .sim-event-row span {min-width:0;padding:5px 3px;border-color:#174761;font-size:calc(10px * var(--pt-global-scale));color:inherit}
+#simulationPanel .sim-empty {display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:100%;padding:12px;text-align:center;color:#d5e7f2;font-size:calc(12px * var(--pt-global-scale));line-height:1.5}
+#simulationPanel .sim-empty p {margin:0}
+#simulationPanel .sim-reset-row {display:flex;flex:0 0 auto;flex-wrap:wrap;align-items:center;gap:5px 9px;padding:2px 6px;background:transparent;border:0;min-width:0}
+#simulationPanel #resetSimulationBtn {flex:1 1 145px;height:auto;min-height:calc(32px * var(--pt-global-scale));border-color:#00dce9;background:linear-gradient(#07546a,#012638 65%);box-shadow:inset 0 1px 4px #06e6ef55}
+#simulationPanel .sim-reset-row label {flex:0 1 auto;gap:5px;min-width:0;font-size:calc(12px * var(--pt-global-scale));color:#eaf6ff;line-height:1.3}
+#simulationPanel input[type=checkbox] {flex:0 0 auto;accent-color:#00c5dc;width:calc(15px * var(--pt-global-scale));height:calc(15px * var(--pt-global-scale));margin:0}
+#simulationPanel .sim-reset-row>span {flex:1 0 100%;min-width:0;text-align:right;font-size:calc(11px * var(--pt-global-scale));font-variant-numeric:tabular-nums}
+#simulationPanel .sim-play-section {flex:0 0 auto;padding-bottom:9px}
+#simulationPanel .sim-play-controls {gap:12px;padding:8px;min-width:0}
+#simulationPanel .sim-play-controls button {width:calc(44px * var(--pt-global-scale));height:calc(34px * var(--pt-global-scale));padding:3px;border-color:#10d7e8;background:linear-gradient(#0b536a,#022435 65%)}
+#simulationPanel .sim-play-controls .control-icon {color:#edffff;width:calc(24px * var(--pt-global-scale));height:calc(24px * var(--pt-global-scale))}
+#simulationPanel .sim-speed {display:block;width:calc(100% - 30px);height:10px;min-width:0;margin:7px 15px 3px;appearance:none;-webkit-appearance:none;border:1px solid #1b4c63;border-radius:8px;background:linear-gradient(to right,#02d8e5 var(--sim-speed-progress,55%),#284e65 var(--sim-speed-progress,55%));accent-color:#00dbe7;cursor:pointer}
+#simulationPanel .sim-speed::-webkit-slider-thumb {appearance:none;-webkit-appearance:none;width:18px;height:18px;border:4px solid #04d5e1;border-radius:50%;background:#09627b;box-shadow:0 0 4px #00edff66}
+#simulationPanel .sim-speed::-moz-range-thumb {width:10px;height:10px;border:4px solid #04d5e1;border-radius:50%;background:#09627b}
+#simulationPanel .sim-filter-section {flex:0 0 auto;padding-bottom:7px}
+#simulationPanel .sim-filter-title {border:0;background:transparent;align-items:flex-start;padding-bottom:2px}
+#simulationPanel .sim-filter-summary {margin:0 10px 6px 34px;max-height:4.3em;overflow:auto;overflow-wrap:anywhere;color:#cce3f0;font-size:calc(11px * var(--pt-global-scale));line-height:1.4;scrollbar-width:thin}
+#simulationPanel .sim-filters {max-height:calc(140px * var(--pt-global-scale));min-width:0;margin:4px 6px;padding:6px;gap:5px;background:#06273b;overflow:auto;scrollbar-width:thin;border:1px solid #23617e;border-radius:6px}
+#simulationPanel .sim-filters label {border:1px solid #34728b;border-radius:4px;padding:3px;gap:4px;color:#e3f3ff;font-size:calc(11px * var(--pt-global-scale))}
+#simulationPanel .sim-filter-actions {grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;padding:4px 8px;min-width:0}
+#simulationPanel .sim-filter-actions button {width:100%;font-weight:600}
+#simulationPanel #simLegendBtn {grid-column:1/-1;border-color:#00dae8;background:linear-gradient(#07516a,#032638 65%)}
+@media(prefers-reduced-motion:reduce) {#simulationPanel input {scroll-behavior:auto}}
+@media(forced-colors:active) {
+ #menuBar,.toolbar,#workspaceTabs,#simulationPanel,#simulationPanel section,#simulationPanel .sim-empty,#simulationPanel #simulationEvents,#simulationPanel .sim-event-head,#simulationPanel .sim-event-row,#simulationPanel .sim-event-title,#simulationPanel .sim-play-title,#simulationPanel .sim-filter-title,#simulationPanel .sim-reset-row,#simulationPanel .sim-filters {background:Canvas;color:CanvasText;box-shadow:none}
+ #mainToolbar button,#toolRail button,#workspaceTabs button,#simulationPanel button,#simulationPanel .control-icon {background:ButtonFace;color:ButtonText;box-shadow:none}
+ #simulationPanel .sim-speed {background:Canvas}
+ #simulationPanel .sim-speed::-webkit-slider-thumb {background:Highlight;border-color:Highlight}
+ #simulationPanel button:focus-visible,#simulationPanel input:focus-visible {outline-color:Highlight!important}
+}
+body.pt-high-contrast #simulationPanel :focus-visible {outline-color:#ffff00!important}

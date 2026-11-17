@@ -1,0 +1,22 @@
+{
+  "id": "spa",
+  "name": "Español",
+  "translations": {
+    "concept-arp": {
+      "title": "Seguir ARP e ICMP",
+      "instructions": "Activa el modo Simulación. Envía un PDU simple de Client a Server y sigue los eventos ARP e ICMP. Observa cómo el switch aprende direcciones MAC."
+    },
+    "skill-dhcp": {
+      "title": "Configurar un cliente DHCP",
+      "instructions": "Configura el cliente para obtener una dirección de R1 mediante DHCP. Comprueba la concesión y la conectividad con 192.168.50.1."
+    },
+    "design-addressing": {
+      "title": "Diseñar un plan de direccionamiento",
+      "instructions": "Elige dos subredes IPv4 sin solapamiento. Configura R1 y ambos equipos, incluidas las puertas de enlace, y verifica la conectividad en ambos sentidos."
+    },
+    "troubleshoot-link": {
+      "title": "Restaurar un enlace desactivado",
+      "instructions": "Client no puede llegar a Server. Inspecciona la topología y los puertos, identifica y corrige el fallo y verifica la conectividad."
+    }
+  }
+}

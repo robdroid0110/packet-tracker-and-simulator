@@ -1,0 +1,14 @@
+/* Grid is anchored to map coordinates, above background images, below objects. */
+#ptPhysicalWorkspace.physical{background-image:none}
+#ptPhysicalWorkspace .pt-metric-grid{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+#ptPhysicalWorkspace .pt-location,#ptPhysicalWorkspace .pt-physical-map-device{z-index:1}
+#ptPhysicalSettings{width:min(510px,94vw);max-height:88vh;overflow:auto;border:1px solid #6b8296;border-radius:6px;background:#f4f7fa;color:#24374a;padding:20px;box-shadow:0 8px 35px #0006}
+#ptPhysicalSettings::backdrop{background:#0005}
+#ptPhysicalSettings h2{font-size:17px;margin:0 0 15px}
+.pt-physical-settings-fields{display:grid;gap:12px}
+.pt-physical-settings-fields label{display:flex;align-items:center;justify-content:space-between;gap:15px}
+.pt-physical-settings-fields input:not([type=checkbox]),.pt-physical-settings-fields select{min-width:125px;padding:6px}
+.pt-physical-settings-fields p{font-size:12px;line-height:1.5}
+#ptPhysicalSettings footer{display:flex;justify-content:flex-end;gap:10px;margin-top:15px}
+#ptPhysicalSettings [role=status]{color:#ab2424;font-size:12px}
+#ptPhysicalSettings button:focus-visible{outline:3px solid #1678b0;outline-offset:2px}

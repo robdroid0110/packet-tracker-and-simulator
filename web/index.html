@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <script>if(new URLSearchParams(location.search).has('device'))document.documentElement.classList.add('pt-device-only');</script>
+  <title>Packet Tracker and Simulator</title>
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="/preferences.css" />
+  <link rel="stylesheet" href="/notes.css" />
+  <link rel="stylesheet" href="/physical-links.css" />
+  <link rel="stylesheet" href="/interface-overview.css" />
+  <link rel="stylesheet" href="/preferences-extended.css" />
+  <link rel="stylesheet" href="/font-hidpi.css" />
+  <link rel="stylesheet" href="/first-lab.css" />
+  <link rel="stylesheet" href="/workspace-basics.css" />
+  <link rel="stylesheet" href="/physical-workspace.css" />
+  <link rel="stylesheet" href="/physical-distance.css" />
+  <link rel="stylesheet" href="/physical-cables.css" />
+  <link rel="stylesheet" href="/icp.css" />
+  <link rel="stylesheet" href="/physical-accessibility.css" />
+  <link rel="stylesheet" href="/visual-customization.css" />
+  <link rel="stylesheet" href="/physical-navigation.css" />
+  <link rel="stylesheet" href="/physical-special-notes.css" />
+  <link rel="stylesheet" href="/logical-workspace.css" />
+  <link rel="stylesheet" href="/workspace-list.css" />
+  <link rel="stylesheet" href="/workspace-tools.css" />
+  <link rel="stylesheet" href="/simulation-engine.css" />
+  <link rel="stylesheet" href="/device-config-engine.css" />
+  <link rel="stylesheet" href="/ui-polish.css" />
+  <link rel="stylesheet" href="/time-controls.css" />
+  <link rel="stylesheet" href="/bottom-dock.css" />
+  <link rel="stylesheet" href="/workspace-chrome.css" />
+  <link rel="stylesheet" href="/topology-presentation.css" />
+</head>
+<body>
+  <div id="menuBar">
+    <button class="menu-item">File</button><button class="menu-item">Edit</button><button class="menu-item">Options</button>
+    <button class="menu-item">View</button><button class="menu-item">Tools</button><button class="menu-item">Extensions</button>
+    <button class="menu-item">Window</button><button class="menu-item">Help</button>
+    <span class="menu-spacer"></span><span class="app-title">Packet Tracker and Simulator</span><span id="health">engine</span>
+  </div>
+
+  <div id="mainToolbar" class="toolbar bevel">
+    <button id="newBtn" title="New"><img class="tb-icon" src="/assets/icons/toolbar/iTBNew.png" alt=""></button><button id="openBtn" title="Open"><img class="tb-icon" src="/assets/icons/toolbar/iTBOpen.png" alt=""></button><button id="saveBtn" title="Save"><img class="tb-icon" src="/assets/icons/toolbar/iTBSave.png" alt=""></button>
+    <button title="Print" disabled><img class="tb-icon" src="/assets/icons/toolbar/iTBPrint.png" alt=""></button><button title="Activity Wizard" disabled><img class="tb-icon" src="/assets/icons/toolbar/iTBActivityWizard.png" alt=""></button>
+    <span class="sep"></span>
+    <button title="Copy" disabled><img class="tb-icon" src="/assets/icons/toolbar/iTBCopy.png" alt=""></button><button title="Paste" disabled><img class="tb-icon" src="/assets/icons/toolbar/iTBPaste.png" alt=""></button>
+    <button title="Undo" disabled><img class="tb-icon" src="/assets/icons/toolbar/iTBUndo.png" alt=""></button><button title="Redo" disabled><img class="tb-icon" src="/assets/icons/toolbar/iTBRedo.png" alt=""></button>
+    <span class="sep"></span>
+    <button id="zoomIn" title="Zoom in"><img class="tb-icon" src="/assets/icons/toolbar/iTBZoomIn.png" alt=""></button><button id="zoomReset" title="Reset zoom"><img class="tb-icon" src="/assets/icons/toolbar/iTBZoomReset.png" alt=""></button><button id="zoomOut" title="Zoom out"><img class="tb-icon" src="/assets/icons/toolbar/iTBZoomOut.png" alt=""></button>
+    <button id="fitBtn" title="Fit workspace"><img class="tb-icon svg" src="/assets/icons/toolbar/viewport.svg" alt=""></button>
+    <span class="sep"></span>
+    <button id="shellToggle" class="agent-shell-button" title="Open agent shell">⌘ Agent Shell</button>
+    <span class="toolbar-spacer"></span><button id="globalHelpBtn" title="Open application help"><img class="tb-icon svg" src="/assets/icons/toolbar/help.svg" alt=""></button>
+  </div>
+
+  <div id="toolRail" class="toolbar bevel secondary-toolbar">
+    <button class="tool active" data-tool="select" title="Select"><img class="tool-icon" src="/assets/icons/pltoolbox/iSelect.png" alt=""></button>
+    <button class="tool" data-tool="pan" title="Pan workspace" aria-label="Pan workspace">✋</button>
+    <button class="tool" data-tool="inspect" title="Inspect"><img class="tool-icon" src="/assets/icons/pltoolbox/iInspect.png" alt=""></button>
+    <button class="tool" data-tool="delete" title="Delete"><img class="tool-icon" src="/assets/icons/pltoolbox/iDelete.png" alt=""></button>
+    <button class="tool" data-tool="select" title="Resize / select area"><img class="tool-icon" src="/assets/icons/pltoolbox/iResize.png" alt=""></button>
+    <span class="sep"></span>
+    <button class="tool" data-tool="note" title="Place note"><img class="tool-icon" src="/assets/icons/pltoolbox/iNote.png" alt=""></button>
+    <button class="tool" id="linkBtn" data-tool="cable" title="Connections"><img class="tool-icon" src="/assets/icons/componentbox/Connections25x25.png" alt=""></button>
+    <button class="tool" data-tool="pdu" title="Add simple PDU"><img class="tool-icon" src="/assets/icons/pltoolbox/iAddSimplePDU.png" alt=""></button>
+    <button class="tool" data-tool="pdu" title="Add complex PDU"><img class="tool-icon svg" src="/assets/icons/toolbar/add-complex-pdu.svg" alt=""></button>
+  </div>
+
+  <section id="workspaceShell">
+    <div id="workspaceTabs">
+      <div class="workspace-left">
+        <button class="workspace-tab active">Logical</button><button class="workspace-tab">Physical</button>
+        <span class="coordinates">x: 0, y: 0</span>
+      </div>
+      <div class="workspace-right"><span class="crumb">Root</span><button title="Back" disabled><img src="/assets/icons/toolbar/back.svg" alt=""></button><button title="Cloud" disabled><img src="/assets/icons/toolbar/cloud.svg" alt=""></button><button title="Move" disabled><img src="/assets/icons/toolbar/4-way-nav.svg" alt=""></button><button title="Background" disabled><img src="/assets/icons/toolbar/image.svg" alt=""></button></div>
+    </div>
+    <section id="workspace">
+      <svg id="wires"></svg>
+      <div id="nodes"></div>
+      <div id="emptyHint">Choose a device below and place it in the Logical workspace.</div>
+      <aside id="simulationPanel" class="hidden" aria-label="Simulation Panel">
+        <div class="sim-panel-title"><svg class="control-icon" aria-hidden="true"><use href="/control-icons.svg#list"></use></svg><strong>Simulation Panel</strong><button id="simPanelClose" title="Close Simulation Panel" aria-label="Close Simulation Panel"><svg class="control-icon" aria-hidden="true"><use href="/control-icons.svg#close"></use></svg></button></div>
+        <section class="sim-event-section" aria-label="Captured events">
+        <div class="sim-event-title"><svg class="control-icon" aria-hidden="true"><use href="/control-icons.svg#chevron"></use></svg>Event List</div>
+        <div class="sim-event-head"><span>Vis.</span><span>Time(sec)</span><span>Last Device</span><span>At Device</span><span>Type</span></div>
+        <div id="simulationEvents"></div>
+        </section>
+        <div class="sim-reset-row"><button id="resetSimulationBtn"><svg class="control-icon" aria-hidden="true"><use href="/control-icons.svg#reset"></use></svg>Reset Simulation</button><label><input type="checkbox" checked> Constant Delay</label><span>Captured to: <strong id="captureCount">0</strong></span></div>
+        <section class="sim-play-section" aria-label="Simulation playback">
+        <div class="sim-play-title"><svg class="control-icon" aria-hidden="true"><use href="/control-icons.svg#play"></use></svg>Play Controls</div>
+        <div class="sim-play-controls"><button data-sim-step="back" title="Step back" aria-label="Step back"><svg class="control-icon" aria-hidden="true"><use href="/control-icons.svg#back"></use></svg></button><button data-sim-step="play" title="Play" aria-label="Play"><svg class="control-icon" aria-hidden="true"><use href="/control-icons.svg#play"></use></svg></button><button data-sim-step="forward" title="Capture / Forward" aria-label="Capture / Forward"><svg class="control-icon" aria-hidden="true"><use href="/control-icons.svg#forward"></use></svg></button></div>
+        <input class="sim-speed" aria-label="Simulation speed" type="range" min="1" max="100" value="55">
+        </section>
+        <section class="sim-filter-section" aria-label="Event filters">
+        <div class="sim-filter-title">Event List Filters - Visible Events</div>
+        <div class="sim-filter-summary" aria-label="Currently visible protocols"></div>
+        <div class="sim-filters" id="simProtocolFilters" role="group" aria-label="Visible event protocols" hidden></div>
+        <div class="sim-filter-actions"><button>Edit Filters</button><button>Show All/None</button></div>
+        </section>
+      </aside>
+    </section>
+  </section>
+
+  <section id="bottomDock" class="bevel">
+    <div id="bottomResizeHandle" title="Drag to resize device panel"></div>
+    <div id="timeStrip">
+      <div class="play-controls">
+        <span class="clock-column">Time: <strong id="clock">00:00:00.000</strong></span>
+        <div class="transport-controls" role="group" aria-label="Playback controls">
+        <button id="resetTimeBtn" class="round-control" title="Reset timer" aria-label="Reset timer"><svg class="control-icon" aria-hidden="true"><use href="/control-icons.svg#timer"></use></svg></button>
+        <strong class="play-label">Playback:</strong>
+        <button id="stepBackBtn" title="Back"><svg class="control-icon" aria-hidden="true"><use href="/control-icons.svg#back"></use></svg></button>
+        <button id="playBtn" title="Play"><svg class="control-icon" aria-hidden="true"><use href="/control-icons.svg#play"></use></svg></button>
+        <button id="stepForwardBtn" title="Capture / Forward"><svg class="control-icon" aria-hidden="true"><use href="/control-icons.svg#forward"></use></svg></button>
+        </div>
+      </div>
+      <div class="mode-toggle">
+        <button id="eventListBtn"><svg class="control-icon" aria-hidden="true"><use href="/control-icons.svg#list"></use></svg> Event List</button>
+        <button id="realtimeBtn" class="active"><svg class="control-icon" aria-hidden="true"><use href="/control-icons.svg#clock"></use></svg> Realtime</button>
+        <button id="simulationBtn"><svg class="control-icon" aria-hidden="true"><use href="/control-icons.svg#monitor"></use></svg> Simulation</button>
+      </div>
+    </div>
+
+    <div id="paletteRow">
+      <div id="categoryColumn">
+        <div id="mainCategories" role="group" aria-label="Device categories">
+          <button class="category active" data-category="network" data-group="0" title="Network Devices"><svg class="dock-icon" aria-hidden="true"><use href="/dock-icons.svg#network"></use></svg></button>
+          <button class="category" data-category="end" data-group="1" title="End Devices"><svg class="dock-icon" aria-hidden="true"><use href="/dock-icons.svg#pc"></use></svg></button>
+          <button class="category" data-category="components" data-group="2" title="Components"><svg class="dock-icon" aria-hidden="true"><use href="/dock-icons.svg#components"></use></svg></button>
+          <button class="category" data-category="connections" data-group="3" title="Connections"><svg class="dock-icon" aria-hidden="true"><use href="/dock-icons.svg#connections"></use></svg></button>
+          <button class="category" data-category="misc" data-group="4" title="Miscellaneous"><svg class="dock-icon" aria-hidden="true"><use href="/dock-icons.svg#folder"></use></svg></button>
+          <button class="category" data-category="multiuser" data-group="5" title="Multiuser"><svg class="dock-icon" aria-hidden="true"><use href="/dock-icons.svg#cloud"></use></svg></button>
+        </div>
+        <input id="paletteSearch" aria-label="Filter devices" placeholder="Filter devices…" autocomplete="off" />
+        <div id="subtypes"></div>
+      </div>
+
+      <div class="column-splitter" id="leftColumnSplitter" title="Drag to resize device type panel"></div>
+
+      <div id="subPalette">
+        <div id="deviceTray" role="group" aria-label="Available devices and connections"></div>
+        <div id="paletteStatus">(Select a Device to Drag and Drop to the Workspace)</div>
+      </div>
+
+      <div class="column-splitter" id="rightColumnSplitter" title="Drag to resize PDU panel"><span>▶</span></div>
+
+      <aside id="rightDock">
+        <div id="scenarioPane">
+          <div class="scenario-row"><button class="info-button" title="Scenario information"><svg class="control-icon" aria-hidden="true"><use href="/control-icons.svg#info"></use></svg></button><select aria-label="Active PDU scenario"><option>Scenario 0</option></select></div>
+          <div class="scenario-actions"><button id="scenarioNewBtn">New</button><button id="scenarioDeleteBtn">Delete</button></div>
+          <button class="pdu-toggle" id="pduToggleBtn">Toggle PDU List Window</button>
+        </div>
+        <div id="pduPane">
+          <div class="pdu-header"><span>Fire</span><span>Last Status</span><span>Source</span><span>Destination</span><span>Type</span><span>Color</span><span>Time(sec)</span><span>Periodic</span><span>Num</span><span>Edit</span><span>Delete</span></div>
+          <div id="eventList"><div class="empty-small">No user-created PDUs.</div></div>
+        </div>
+      </aside>
+    </div>
+
+    <div id="shellPane" class="closed">
+      <div class="shell-head"><strong>Packet Tracker and Simulator Agent Shell</strong><span>same simulator state as GUI</span><button id="closeShell">×</button></div>
+      <pre id="termOut">Packet Tracker and Simulator agent shell ready. Type help for commands.</pre>
+      <form id="termForm"><span class="prompt">tracker&gt;</span><input id="termIn" autocomplete="off" spellcheck="false"/><button>Run</button></form>
+    </div>
+  </section>
+
+  <footer id="statusBar"><span>Logical Workspace</span><span id="statusText">Ready</span><span id="zoomLabel">100%</span></footer>
+
+  <div id="deviceDialog" class="dialog hidden">
+    <div class="dialog-window">
+      <div class="dialog-title"><strong id="dialogName">Device</strong><button id="dialogHelp" title="Show this device's reference help">?</button><button id="dialogClose">×</button></div>
+      <div class="dialog-tabs" id="dialogTabs"></div>
+      <div id="dialogBody"></div>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+  <script src="/pt-help-parity.js"></script>
+  <script src="/preferences.js"></script>
+  <script src="/notes.js"></script>
+  <script src="/physical-links.js"></script>
+  <script src="/interface-overview.js"></script>
+  <script src="/preferences-extended.js"></script>
+  <script src="/first-lab-services.js"></script>
+  <script src="/first-lab-packets.js"></script>
+  <script src="/logical-workspace.js"></script>
+  <script src="/workspace-list.js"></script>
+  <script src="/physical-navigation.js"></script>
+  <script src="/physical-special-notes.js"></script>
+  <script src="/physical-distance.js"></script>
+  <script src="/physical-cables.js"></script>
+  <script src="/visual-customization.js"></script>
+  <script src="/icp.js"></script>
+  <script src="/physical-accessibility.js"></script>
+  <script src="/workspace-tools.js"></script>
+  <script src="/simulation-engine.js"></script>
+  <script src="/device-config-engine.js"></script>
+  <script src="/command-reference.js"></script>
+  <script src="/sample-library.js"></script>
+  <script src="/device-windows.js"></script>
+  <script src="/ui-polish.js"></script>
+  <script src="/bottom-dock.js"></script>
+  <script src="/canvas-accessibility.js"></script>
+  <script src="/topology-presentation.js"></script>
+</body>
+</html>
