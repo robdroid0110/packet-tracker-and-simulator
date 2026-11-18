@@ -379,6 +379,27 @@ class Handler(SimpleHTTPRequestHandler):
                 save_state()
             self._json({'ok':True,'result':verification},202 if verification['status']=='queued' else 200)
             return
+        if path == "/api/ios/complete":
+            from netsim.ios import IOSSession
+            from netsim.ios_completion import complete
+            try:
+                if set(body) != {"device", "text", "cursor"}:
+                    raise ValueError("Expected device, text, and cursor")
+                device, text, cursor = body["device"], body["text"], body["cursor"]
+                if not isinstance(device, str) or not 1 <= len(device) <= 128:
+                    raise ValueError("Invalid device name")
+                with LOCK:
+                    target = LAB._device(device)
+                    if target.kind not in ("router", "switch"):
+                        raise ValueError("IOS CLI is only available for simulated routers/switches")
+                    session = PROC.ios_sessions.get(device)
+                    if session is None:
+                        session = IOSSession(LAB, device)
+                    result = complete(session, text, cursor)
+                self._json({"ok": True, **result})
+            except (LabError, ValueError) as exc:
+                self._json({"ok": False, "error": str(exc)}, 400)
+            return
         if path == "/api/activity/action":
             from netsim.activity import progress
             try:
