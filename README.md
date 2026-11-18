@@ -4,9 +4,25 @@
 
 A network simulator for **Linux and Windows** with visual topology editing, traffic simulation and an agent API. Create, configure, inspect and test virtual networks locally without a mandatory account.
 
-![Packet Tracker and Simulator displaying a seven-device demonstration topology](assets/screenshots/network-topology.png)
+![Packet Tracker and Simulator native Linux desktop showing a fully connected 97-device, eight-arm star topology](assets/screenshots/network-topology.png)
 
-*Real application screenshot from an isolated synthetic demo lab. No personal lab data is shown.*
+*Actual Linux Qt desktop capture: **97 simulated devices, 96 physical links**, eight routed branches. All nodes and links are from a synthetic, isolated demo lab.*
+
+### Watch an agent build the network
+
+![A short recording of the real Packet Tracker desktop as an LLM-authored command plan constructs an eight-arm star with 97 devices and 96 links, one branch at a time](assets/demos/agent-star-build.gif)
+
+[Watch the 14-second MP4](assets/demos/agent-star-build.mp4) · [Reproduce the build with the agent API](tools/demo_agent_star.py)
+
+The animation is recorded from the **real desktop application**, not a simulated UI mockup. An LLM-authored plan executes **369 real commands** through the local `/api/command` endpoint. The command/count overlay is added during video editing; devices, links and connection status are rendered by the application itself. Three cross-branch connectivity checks passed after configuration.
+
+Run the same synthetic demo in your own *new, empty* lab (the script refuses to overwrite an existing network):
+
+```bash
+python3 desktop.py --server --port 8778 --state /tmp/packet-tracker-star-demo.json
+# In another terminal, while the simulator is open:
+python3 tools/demo_agent_star.py --url http://127.0.0.1:8778 --delay 0.08
+```
 
 > **Independent project:** Not affiliated with, endorsed by or sponsored by Cisco. Cisco Packet Tracer is a third-party product; this simulator uses its own models and has documented limitations.
 
