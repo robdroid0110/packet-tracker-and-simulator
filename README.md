@@ -48,6 +48,8 @@ Packet Tracker and Simulator can also run in a Linux desktop window or as a Wind
 
 On the topology canvas, state-driven symbols distinguish **green** (link up/forwarding), **amber** (STP blocking), **red** (down), and **black** (console) at the link endpoints. Cable line styles distinguish supported copper, fibre and serial types without copying third-party artwork. The workspace adapts to tiled/narrow/short desktop windows; see [Responsive layout](RESPONSIVE_LAYOUT.md).
 
+**Console Tab completion:** The router/switch CLI, PC/server command prompt and built-in agent shell now complete supported command names with Tab without running them. Ambiguous matches show suggestions; router and switch completions respect the current IOS mode and available interfaces. See [Device console Tab completion](DEVICE_TAB_COMPLETION.md).
+
 In **Connections**, choose **Automatically Choose Connection Type**, then click two devices to connect compatible free data ports. The simulator chooses the matching cable type, preferring a working connection and copper when alternatives are equivalent. Hold Ctrl while choosing the tool to make multiple connections; press Escape to finish. The same operation is available to agents as `auto-connect PC1 SW1` through `POST /api/command`, with undo support. Unsupported devices or devices with no compatible free ports cannot be connected automatically.
 
 On the logical canvas, **Shift+D** focuses a device. Arrow keys navigate; **Shift+Arrow** moves the focused device, and **Enter** opens it or uses the chosen connection tool. See [keyboard and accessibility controls](WORKSPACE_ACCESSIBILITY_REFERENCE.md#logical-canvas-keyboard-controls) for cycling overlapping devices, larger moves, manual port selection and limitations.
