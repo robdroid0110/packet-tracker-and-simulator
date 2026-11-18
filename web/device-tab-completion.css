@@ -1,0 +1,16 @@
+/* Console-only completion hints; preserve the existing CLI and command prompts. */
+.pt-cli-completions[hidden]{display:none}
+#deviceCliScreen .pt-cli-completions,
+#dialogBody .pt-cli-completions,
+#shellPane .pt-cli-completions{
+  padding:5px 9px;margin:4px 0 0;
+  border-left:2px solid #43bbd7;
+  border-radius:3px;
+  background:rgba(19,79,101,.22);
+  color:#a9e3ed;
+  font:12px/1.45 var(--pt-cli-family,Consolas,monospace);
+  white-space:pre-wrap;overflow-wrap:anywhere;
+  max-height:96px;overflow-y:auto;
+}
+#deviceCliScreen .pt-cli-completions{color:#c3eaf8}
+.pt-cli-completions:empty{display:none}

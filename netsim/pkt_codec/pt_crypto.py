@@ -52,3 +52,23 @@ def decrypt_pkt(pkt: bytes) -> bytes:
     xml = uncompress_qt(stage2)
 
     return xml
+
+def encrypt_pkt(xml: bytes) -> bytes:
+    """Encode a network XML document using the independently documented PT container.
+
+    Byte layout reverses decrypt_pkt. This is file-interoperability encoding,
+    not an implementation of the proprietary network simulation engine.
+    """
+    if not isinstance(xml, bytes) or len(xml) > 32_000_000:
+        raise ValueError('PKT XML must be bytes smaller than 32 MB')
+    blob = struct.pack('>I',len(xml)) + zlib.compress(xml,level=6)
+    L = len(blob)
+    inner = bytes(value ^ ((L-i)&255) for i,value in enumerate(blob))
+    eax = EAX(Twofish(bytes([137])*16).encrypt)
+    encrypted, tag = eax.encrypt(nonce=bytes([16])*16,plaintext=inner)
+    stage1 = encrypted + tag
+    L = len(stage1)
+    out = bytearray(L)
+    for i,value in enumerate(stage1):
+        out[L-1-i] = value ^ ((L-i*L)&255)
+    return bytes(out)

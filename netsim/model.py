@@ -175,6 +175,7 @@ class NetworkLab:
         self.clusters: Dict[str,dict] = {}
         from .workspace_tools import defaults
         self.workspace_tools=defaults()
+        self.activity: dict | None = None
         self.physical_locations: Dict[str,dict] = self._initial_physical_locations()
         self.device_locations: Dict[str,str] = {}
         self.physical_device_details: Dict[str,dict] = {}
@@ -562,6 +563,7 @@ class NetworkLab:
         self.clusters.clear()
         from .workspace_tools import defaults
         self.workspace_tools=defaults()
+        self.activity = None
 
     # ---------- simplified DNS / HTTP application services ----------
     @staticmethod
@@ -2084,6 +2086,7 @@ class NetworkLab:
         light_cache={}
         return {
             "workspace_tools":deepcopy(self.workspace_tools),
+            "activity":deepcopy(self.activity),
             "version": 1,
             "devices": {name: self._device_to_dict(d) for name, d in self.devices.items()},
             "links": [{**asdict(l), "lights":__import__("netsim.hardware",fromlist=["lights"]).lights(self,l,light_cache),"up": self.link_operational(l),
@@ -2309,6 +2312,8 @@ class NetworkLab:
         for group in self.workspace_tools["diagram"]["groups"].values():
             if any(name not in self.devices for name in group["members"]):
                 raise LabError("unknown device in diagram group")
+        from .activity import validate_activity
+        self.activity=validate_activity(data.get("activity"))
         self.events = list(data.get("events", []))[-200:]
         self.packet_events = list(data.get("packet_events", []))[-256:]
         self.packet_counter = int(data.get("packet_counter", len(self.packet_events)))

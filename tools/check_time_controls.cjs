@@ -14,9 +14,10 @@ const {spawn}=require('child_process');const fs=require('fs'),os=require('os'),p
   for(const width of [1920,1440,1024,800])for(const scale of [1,1.5]){
    await page.setViewportSize({width,height:900});await page.evaluate(s=>document.documentElement.style.setProperty('--pt-global-scale',s),String(scale));
    const failure=await page.evaluate(ids=>{
-    const strip=document.querySelector('#timeStrip').getBoundingClientRect();
-    for(const id of ids){const b=document.getElementById(id),r=b.getBoundingClientRect();if(r.left<strip.left||r.right>strip.right+1||r.top<strip.top||r.bottom>strip.bottom+1)return id+' clipped';if(!b.querySelector('svg use'))return id+' missing vector icon'}
-    const play=document.querySelector('.play-controls');if(play.scrollWidth>play.clientWidth+1)return 'Playback scrolling';
+    const strip=document.querySelector('#timeStrip').getBoundingClientRect(),compact=document.body.classList.contains('pt-compact-layout');
+    for(const id of ids){const b=document.getElementById(id),r=b.getBoundingClientRect();if((!compact&&(r.left<strip.left||r.right>strip.right+1))||r.top<strip.top||r.bottom>strip.bottom+1)return id+' clipped';if(!b.querySelector('svg use'))return id+' missing vector icon'}
+    const play=document.querySelector('.play-controls');if(!compact&&play.scrollWidth>play.clientWidth+1)return 'Playback scrolling';
+    if(compact&&getComputedStyle(document.querySelector('#timeStrip')).overflowX!=='auto')return 'Compact controls do not scroll';
     return null;
    },controls);if(failure)throw Error(width+'px / '+scale+': '+failure);
   }

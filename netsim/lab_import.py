@@ -1,6 +1,8 @@
 """Import Packet Tracker and Simulator JSON and a limited subset of legacy network simulator labs."""
 import base64
 import ipaddress
+from html.parser import HTMLParser
+import html
 import json
 import re
 import tempfile
@@ -24,10 +26,10 @@ def decode_file(encoded, filename):
         raise ValueError('File exceeds the 8 MB import limit')
     if not isinstance(filename, str):
         raise ValueError('A filename is required')
-    if filename.lower().endswith('.pkt'):
-        return import_pkt(raw)
+    if filename.lower().endswith(('.pkt', '.pka')):
+        return import_pkt(raw, filename=filename)
     if not filename.lower().endswith('.json'):
-        raise ValueError('Choose a Packet Tracker and Simulator .json or legacy network simulator .pkt file')
+        raise ValueError('Choose a Packet Tracker and Simulator .json, .pkt or .pka file')
     try:
         data = json.loads(raw)
         if not isinstance(data, dict) or data.get('version') != 1 or not isinstance(data.get('devices'), dict) or not isinstance(data.get('links'), list):
@@ -137,17 +139,120 @@ def import_running_config(lab, device, lines, warnings):
         warnings.append(device.name + ': ' + str(skipped) + ' configuration command(s) could not be applied; original running configuration is preserved in device attributes')
 
 
-def import_pkt(raw):
+class _ActivityText(HTMLParser):
+    """Render teacher HTML as inert, readable text (no active content)."""
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.items = []
+        self.skip = 0
+
+    def handle_starttag(self, tag, attrs):
+        if tag in ('script', 'style', 'object', 'iframe'):
+            self.skip += 1
+        elif not self.skip and tag in ('h1', 'h2', 'h3', 'h4', 'p', 'div', 'br',
+                                       'li', 'tr', 'table', 'ol', 'ul'):
+            self.items.append('\n')
+            if tag == 'li': self.items.append(' • ')
+        elif not self.skip and tag == 'img':
+            self.items.append(' [embedded image not rendered] ')
+
+    def handle_endtag(self, tag):
+        if tag in ('script', 'style', 'object', 'iframe') and self.skip:
+            self.skip -= 1
+        elif not self.skip and tag in ('p', 'div', 'li', 'tr', 'h1', 'h2', 'h3', 'h4'):
+            self.items.append('\n')
+
+    def handle_data(self, data):
+        if not self.skip: self.items.append(data)
+
+def _activity_page_text(content):
+    parser = _ActivityText()
+    parser.feed(content or '')
+    text = html.unescape(''.join(parser.items))
+    text = re.sub(r'[ \t]+', ' ', text)
+    text = re.sub(r'\n[ \t]*\n(?:[ \t]*\n)+', '\n\n', text)
+    return text.strip()[:100_000]
+
+def _read_pt_document(raw):
     from .pkt_codec.pt_crypto import decrypt_pkt
     try:
         xml = decrypt_pkt(raw)
+        # No DTD or XML external entity resolution, even for local inputs.
         if b'<!DOCTYPE' in xml.upper() or b'<!ENTITY' in xml.upper():
-            raise ValueError('XML declarations are not supported')
-        root = ET.fromstring(xml)
+            raise ValueError('External entity declarations are not permitted')
+        try:
+            return ET.fromstring(xml), []
+        except ET.ParseError as original:
+            # Some real activities contain invalid XML control characters.
+            # The recovery is non-networked and explicitly reported as lossy.
+            try:
+                from lxml import etree as LET
+            except ImportError as exc:
+                raise ValueError('Nonstandard activity XML requires lxml to safely recover readable content') from exc
+            parser = LET.XMLParser(recover=True, resolve_entities=False,
+                                   load_dtd=False, no_network=True, huge_tree=True)
+            root = LET.fromstring(xml, parser=parser)
+            if root is None:
+                raise ValueError('Could not recover activity XML') from original
+            return root, [f'Nonstandard XML: {len(parser.error_log)} invalid token(s) were recovered; retain the original file.']
+    except ValueError:
+        raise
     except Exception as exc:
-        raise ValueError('Could not decode this .pkt file: ' + str(exc)) from exc
+        raise ValueError('Could not decode this legacy lab: ' + str(exc)) from exc
+
+def import_pkt(raw, filename='network.pkt'):
+    root, parser_warnings = _read_pt_document(raw)
+    if root.tag == 'PACKETTRACER5':
+        lab, warnings = _import_network(root)
+        return lab, parser_warnings + warnings
+    if root.tag != 'PACKETTRACER5_ACTIVITY':
+        raise ValueError('Not a supported Packet Tracer network or activity document')
+    snapshots = root.findall('./PACKETTRACER5')
+    if not snapshots:
+        raise ValueError('Activity is missing its working network')
+    # Activity snapshots: current, initial reference, answer reference.
+    # Never import the answer as the user's current workspace.
+    lab, warnings = _import_network(snapshots[0])
+    pages = []
+    for i, page in enumerate(root.findall('./ACTIVITY/INSTRUCTIONS/PAGE')[:48], 1):
+        content = _activity_page_text(page.text)
+        heading = (page.get('title') or '').strip()
+        if not heading:
+            heading = next((line.strip() for line in content.splitlines() if line.strip()), '')
+        heading = (heading or f'Section {i}')[:160]
+        pages.append({'title': heading, 'text': content})
+    checks = []
+    if len(snapshots) >= 3:
+        # Independent, limited supported-field checks, NOT vendor rubric.
+        # Never persist the plaintext answer reference or comparison XML.
+        from .activity import build_checks
+        try:
+            before, _ = _import_network(snapshots[1])
+            answer, _ = _import_network(snapshots[2])
+            checks = build_checks(before, answer)
+        except (ValueError, LabError) as exc:
+            warnings.append('Independent checks unavailable: ' + str(exc)[:140])
+    comparator = root.find('COMPARISONS')
+    criteria = sum(1 for _ in comparator.iter('NODE')) if comparator is not None else 0
+    lab.activity = {
+        'type': 'imported_pka',
+        'title': Path(filename).stem[:180],
+        'source_version': (root.findtext('VERSION') or '')[:80],
+        'pages': pages,
+        'completed_pages': [],
+        'checks': checks,
+        'vendor_criterion_count': min(criteria, 500_000),
+    }
+    from .activity import validate_activity
+    lab.activity = validate_activity(lab.activity)
+    warnings.insert(0,
+        'Activity imported with instructions and progress tracking. Proprietary grading, hidden assessments, scripts and some device behaviours are NOT supported. Independent checks are not an official score.')
+    warnings.append(f'Activity: {len(pages)} instruction pages, {len(checks)} supported checks, {criteria} legacy comparison nodes.')
+    return lab, parser_warnings + warnings
+
+def _import_network(root):
     if root.tag != 'PACKETTRACER5':
-        raise ValueError('This is not a supported legacy network simulator network file')
+        raise ValueError('Missing Packet Tracer network document')
     if root.find('./NETWORK/DEVICES') is None:
         raise ValueError('legacy network simulator network is missing its device list')
     elements = root.findall('./NETWORK/DEVICES/DEVICE')
@@ -176,7 +281,7 @@ def import_pkt(raw):
         model = typ.get('model', '') if typ is not None else ''
         category = (typ.text or '').lower() if typ is not None else ''
         model_id = next((key for key, value in MODELS.items() if value['label'].lower() == model.lower()), '')
-        kind = MODELS.get(model_id, {}).get('kind', {'pc':'pc', 'server':'server', 'router':'router', 'switch':'switch'}.get(category, 'generic'))
+        kind = MODELS.get(model_id, {}).get('kind', {'pc':'pc', 'laptop':'pc', 'server':'server', 'router':'router', 'switch':'switch', 'multilayerswitch':'switch'}.get(category, 'generic'))
         try:
             x = float(element.findtext('./WORKSPACE/LOGICAL/X', '200'))
             y = float(element.findtext('./WORKSPACE/LOGICAL/Y', '160'))
@@ -253,7 +358,13 @@ def import_pkt(raw):
                 return port_name(text, device.kind)
             pa, pb = physical_port(da,ports[0].text,media_a), physical_port(db,ports[1].text,media_b)
             for device, port, media in ((da, pa, media_a), (db, pb, media_b)):
-                if port not in device.interfaces: device.interfaces[port] = Interface(port,media=media)
+                if port not in device.interfaces:
+                    device.interfaces[port] = Interface(port,media=media)
+                elif media in ('fiber-mm', 'fiber-sm', 'serial', 'phone', 'modem', 'coax', 'usb'):
+                    # Real vendor modules expose SFP/serial interfaces whose
+                    # media type is not discoverable from IOS port names alone.
+                    # The saved cable is authoritative for that physical port.
+                    device.interfaces[port].media = media
             lab.connect(a, pa, b, pb, cable_type)
         except (ValueError, IndexError, TypeError, KeyError, LabError) as exc:
             warnings.append('A link could not be imported: ' + str(exc))

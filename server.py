@@ -81,6 +81,26 @@ class Handler(SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(raw)
 
+    def _reject_large_request(self, size: int, message):
+        # For a moderately oversized upload, consume at most 4 MB before
+        # replying. Otherwise a fast client can receive BrokenPipe while
+        # still sending and miss the useful 413 JSON response. Larger bodies
+        # are rejected without draining to avoid an unbounded upload DoS.
+        if 0 < size <= 4_000_000:
+            old_timeout = self.connection.gettimeout()
+            try:
+                self.connection.settimeout(1.5)
+                remaining = size
+                while remaining:
+                    chunk = self.rfile.read(min(remaining, 65536))
+                    if not chunk: break
+                    remaining -= len(chunk)
+            except (OSError, TimeoutError):
+                pass
+            finally:
+                self.connection.settimeout(old_timeout)
+        self._json({'ok': False, 'error': message}, 413)
+
     def do_GET(self):
         path = unquote(urlparse(self.path).path)
         if path.startswith("/assets/icons/"):
@@ -136,6 +156,11 @@ class Handler(SimpleHTTPRequestHandler):
             try:
                 with LOCK:self._json(schema() if path.endswith('/schema') else view(LAB))
             except (LabError,ValueError,TypeError) as exc:self._json({'ok':False,'error':str(exc)},400)
+            return
+        if path == "/api/activity":
+            from netsim.activity import progress
+            with LOCK:
+                self._json({"ok": True, "activity": progress(LAB)})
             return
         if path == "/api/state":
             with LOCK:
@@ -318,13 +343,13 @@ class Handler(SimpleHTTPRequestHandler):
             n = int(self.headers.get("content-length", "0"))
             if n < 0 or n > 17_000_000:
                 error={'code':'request_too_large','message':'request exceeds the 17 MB limit'} if path == '/api/v1/connectivity/ping' else 'request exceeds the 17 MB limit'
-                self._json({'ok':False,'error':error},413);return
+                self._reject_large_request(n,error);return
             if path == "/api/visuals/action" and (n<2 or n>1_500_000):
-                self._json({"ok":False,"error":"image upload request exceeds 1.5 MB"},413);return
+                self._reject_large_request(n,'image upload request exceeds 1.5 MB');return
             if path == "/api/workspace-tools/action" and (n<2 or n>17_000_000):
-                self._json({"ok":False,"error":"workspace request exceeds 17 MB"},413);return
+                self._reject_large_request(n,'workspace request exceeds 17 MB');return
             if path == "/api/lab/import" and (n<2 or n>11_000_000):
-                self._json({"ok":False,"error":"lab import request exceeds size limit"},413);return
+                self._reject_large_request(n,'lab import request exceeds size limit');return
             body = json.loads(self.rfile.read(n) or b"{}")
             if not isinstance(body,dict):
                 error={'code':'invalid_request','message':'request body must be a JSON object'} if path == '/api/v1/connectivity/ping' else 'request body must be a JSON object'
@@ -353,6 +378,64 @@ class Handler(SimpleHTTPRequestHandler):
                     invalid('operation_rejected',str(exc));return
                 save_state()
             self._json({'ok':True,'result':verification},202 if verification['status']=='queued' else 200)
+            return
+        if path == "/api/ios/complete":
+            from netsim.ios import IOSSession
+            from netsim.ios_completion import complete
+            try:
+                if set(body) != {"device", "text", "cursor"}:
+                    raise ValueError("Expected device, text, and cursor")
+                device, text, cursor = body["device"], body["text"], body["cursor"]
+                if not isinstance(device, str) or not 1 <= len(device) <= 128:
+                    raise ValueError("Invalid device name")
+                with LOCK:
+                    target = LAB._device(device)
+                    if target.kind not in ("router", "switch"):
+                        raise ValueError("IOS CLI is only available for simulated routers/switches")
+                    session = PROC.ios_sessions.get(device)
+                    if session is None:
+                        session = IOSSession(LAB, device)
+                    result = complete(session, text, cursor)
+                self._json({"ok": True, **result})
+            except (LabError, ValueError) as exc:
+                self._json({"ok": False, "error": str(exc)}, 400)
+            return
+        if path == "/api/activity/action":
+            from netsim.activity import progress
+            try:
+                with LOCK:
+                    if not LAB.activity:
+                        raise ValueError("No learning activity is loaded")
+                    action = body.get("action")
+                    if action == "mark_page":
+                        page = body.get("page")
+                        reviewed = body.get("reviewed")
+                        if type(page) is not int or not 0 <= page < len(LAB.activity["pages"]) or type(reviewed) is not bool:
+                            raise ValueError("Invalid activity page or review state")
+                        completed = set(LAB.activity["completed_pages"])
+                        if reviewed: completed.add(page)
+                        else: completed.discard(page)
+                        LAB.activity["completed_pages"] = sorted(completed)
+                        save_state()
+                    elif action != "check_work":
+                        raise ValueError("Unsupported learning activity operation")
+                    self._json({"ok": True, "activity": progress(LAB)})
+            except ValueError as exc:
+                self._json({"ok":False,"error":str(exc)},400)
+            return
+        if path == "/api/lab/export":
+            import base64
+            from netsim.pkt_export import export_pkt
+            try:
+                if body.get("format") != "pkt":
+                    raise ValueError("Only the experimental network-only PKT exporter is supported")
+                with LOCK:
+                    encoded, warnings = export_pkt(LAB)
+                self._json({"ok":True,"format":"pkt",
+                            "data":base64.b64encode(encoded).decode("ascii"),
+                            "warnings":warnings})
+            except (LabError,ValueError) as exc:
+                self._json({"ok":False,"error":str(exc)},400)
             return
         if path == "/api/lab/import":
             from netsim.lab_import import decode_file

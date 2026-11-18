@@ -1,0 +1,232 @@
+/* Split-screen and short-window layout. Full-size desktop layout is untouched. */
+.pt-compact-actions{display:none}
+body.pt-compact-layout{
+  grid-template-rows:24px 35px 35px minmax(0,1fr) 140px var(--dock-status-height);
+  min-width:0;
+}
+body.pt-compact-layout #workspaceShell{min-width:0;min-height:0}
+body.pt-compact-layout #workspace{min-height:0}
+body.pt-compact-layout #menuBar{min-width:0;overflow-x:auto;white-space:nowrap;scrollbar-width:thin}
+body.pt-compact-layout #mainToolbar,
+body.pt-compact-layout #toolRail{min-width:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}
+body.pt-compact-layout #workspaceTabs{
+  display:flex;flex-wrap:nowrap;gap:5px;min-width:0;min-height:0;
+  overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;
+}
+body.pt-compact-layout #workspaceTabs .workspace-left,
+body.pt-compact-layout #workspaceTabs .workspace-right{flex:0 0 auto;min-width:0}
+body.pt-compact-layout #workspaceTabs .coordinates{display:none}
+body.pt-compact-layout #workspaceTabs .workspace-tab{
+  height:28px;min-width:65px;padding:3px 8px;font-size:12px;
+}
+body.pt-compact-layout .pt-compact-actions{
+  display:flex;align-items:center;gap:4px;flex:0 0 auto;
+}
+body.pt-compact-layout .pt-compact-actions button{
+  min-width:0;height:27px;padding:3px 9px;
+  background:linear-gradient(#134c6c,#082c45);color:#e8f9ff;
+  border:1px solid #2c7798;border-radius:7px;white-space:nowrap;
+  font-size:11px;font-weight:600;
+}
+body.pt-compact-layout .pt-compact-actions button[aria-pressed="true"]{
+  background:linear-gradient(#147b91,#09647d);border-color:#58e6f5;
+}
+body.pt-compact-layout .pt-compact-actions button:focus-visible{
+  outline:2px solid #c5ffff;outline-offset:-2px;
+}
+body.pt-compact-layout #bottomDock{
+  display:grid;grid-template-rows:37px minmax(0,1fr);
+  min-width:0;min-height:0;gap:3px;padding:2px 3px 3px;
+  overflow:visible;
+}
+body.pt-compact-layout #bottomResizeHandle{display:none}
+body.pt-compact-layout #timeStrip{
+  display:flex;flex-wrap:nowrap;align-items:center;
+  width:100%;height:37px;min-height:0;min-width:0;
+  padding:2px 6px;gap:7px;overflow-x:auto;overflow-y:hidden;
+  scrollbar-width:thin;white-space:nowrap;
+}
+body.pt-compact-layout #timeStrip .play-controls,
+body.pt-compact-layout #timeStrip .transport-controls,
+body.pt-compact-layout #timeStrip .pt-time-extra,
+body.pt-compact-layout #timeStrip .mode-toggle{
+  display:flex;flex:0 0 auto;flex-basis:auto;
+  flex-wrap:nowrap;align-items:center;min-width:max-content;
+  width:auto;max-width:none;overflow:visible;margin:0;padding:0;
+}
+body.pt-compact-layout #timeStrip .pt-time-extra,
+body.pt-compact-layout #timeStrip .mode-toggle{padding-left:7px;border-left:1px solid #29779c}
+body.pt-compact-layout #timeStrip .play-label{display:none}
+body.pt-compact-layout #timeStrip .clock-column{
+  padding:2px 5px;min-height:0;height:29px;font-size:10px;
+}
+body.pt-compact-layout #timeStrip #clock{font-size:12px}
+body.pt-compact-layout #timeStrip button{height:29px;min-height:0;padding:0 7px;font-size:11px}
+body.pt-compact-layout #timeStrip .transport-controls>button:not(.round-control){
+  height:29px;width:29px;
+}
+body.pt-compact-layout #paletteRow,
+body.pt-compact-layout.pt-ucpw-hidden #paletteRow{
+  display:grid;grid-template-columns:clamp(128px,24vw,205px) 5px minmax(0,1fr);
+  grid-template-rows:minmax(0,1fr);gap:0;
+  min-width:0;min-height:0;height:100%;overflow:hidden;
+}
+body.pt-compact-layout #categoryColumn,
+body.pt-compact-layout #subPalette{
+  min-width:0;min-height:0;height:100%;border-radius:8px;
+}
+body.pt-compact-layout #categoryColumn{
+  grid-column:1;grid-row:1;
+  grid-template-rows:25px 24px minmax(0,1fr);
+  gap:2px;padding:3px;
+}
+body.pt-compact-layout #mainCategories{gap:2px;grid-template-columns:repeat(6,minmax(0,1fr))}
+body.pt-compact-layout #mainCategories .category{height:24px;min-width:0;border-radius:5px;padding:1px}
+body.pt-compact-layout #mainCategories .dock-icon{height:20px;width:20px}
+body.pt-compact-layout #paletteSearch{height:24px;font-size:10px;padding:2px 4px}
+body.pt-compact-layout #subtypes{gap:2px;padding:0}
+body.pt-compact-layout #subtypes .subtype{
+  flex:0 0 25px;width:25px;height:26px;border-radius:5px;padding:1px;
+}
+body.pt-compact-layout #subtypes .dock-icon{height:21px;width:21px}
+body.pt-compact-layout #leftColumnSplitter{grid-column:2;grid-row:1}
+body.pt-compact-layout #subPalette{
+  grid-column:3;grid-row:1;
+  grid-template-rows:minmax(0,1fr) 16px;
+}
+body.pt-compact-layout #deviceTray{min-height:0;overflow-x:auto;overflow-y:hidden;padding:3px 4px;gap:4px}
+body.pt-compact-layout #deviceTray .palette-device{
+  flex:0 0 60px;width:60px;height:61px;min-width:0;
+  gap:1px;padding:2px;border-radius:7px;
+}
+body.pt-compact-layout #deviceTray .palette-device .device-icon,
+body.pt-compact-layout #deviceTray .palette-device .palette-specific-icon,
+body.pt-compact-layout #deviceTray .palette-device .dock-icon{
+  width:38px;height:32px;
+}
+body.pt-compact-layout #deviceTray .palette-device small{font-size:9px;line-height:1.1}
+body.pt-compact-layout #paletteStatus{
+  height:16px;line-height:15px;padding:0 4px;font-size:9px;
+  overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
+}
+body.pt-compact-layout #rightColumnSplitter{display:none}
+body.pt-compact-layout #rightDock{
+  display:none;
+  position:fixed;left:8px;right:8px;bottom:calc(var(--dock-status-height) + 7px);
+  width:auto;height:clamp(210px,43dvh,380px);
+  min-height:0;min-width:0;z-index:90;gap:5px;
+  grid-template-columns:clamp(132px,28vw,190px) minmax(0,1fr);
+  padding:5px;border:1px solid #30b6d1;border-radius:10px;
+  background:#031b2d;box-shadow:0 0 0 2px #06243e,0 -8px 22px #0008;
+}
+body.pt-compact-layout.pt-compact-events #rightDock{display:grid}
+body.pt-compact-layout #rightDock #scenarioPane,
+body.pt-compact-layout #rightDock #pduPane{min-height:0;height:100%}
+body.pt-compact-layout #rightDock #pduPane{overflow:auto}
+body.pt-compact-layout.pt-compact-canvas{
+  grid-template-rows:24px 35px 35px minmax(0,1fr) 0px var(--dock-status-height);
+}
+body.pt-compact-layout.pt-compact-canvas #bottomDock{display:none}
+body.pt-compact-layout #statusBar{overflow:hidden}
+body.pt-compact-layout #shellPane{
+  position:fixed;left:8px;right:8px;bottom:calc(var(--dock-status-height) + 7px);
+  width:auto;height:min(40dvh,240px);max-height:calc(100dvh - 145px);
+  z-index:95;
+}
+body.pt-compact-layout #simulationPanel{
+  width:min(100%,360px);max-width:100%;
+}
+@media(max-width:520px){
+ body.pt-compact-layout #workspaceTabs .workspace-tab{min-width:57px;padding:2px 5px}
+ body.pt-compact-layout .pt-compact-actions button{padding:3px 5px;font-size:10px}
+ body.pt-compact-layout #mainToolbar,
+ body.pt-compact-layout #toolRail{padding-inline:3px}
+ body.pt-compact-layout #rightDock{
+  left:3px;right:3px;grid-template-columns:118px minmax(0,1fr);
+ }
+ body.pt-compact-layout #rightDock #scenarioPane{padding:4px;gap:4px}
+ body.pt-compact-layout #scenarioPane .scenario-actions{gap:2px}
+ body.pt-compact-layout #scenarioPane .scenario-actions button{font-size:10px}
+ body.pt-compact-layout #deviceDialog .device-layout{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}
+ body.pt-compact-layout #deviceDialog .device-sidebar{min-height:65px;max-height:105px;overflow:auto}
+ body.pt-compact-layout #deviceDialog .config-grid{grid-template-columns:minmax(87px,36%) minmax(0,1fr)}
+ body.pt-compact-layout #deviceDialog .desktop-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+ body.pt-compact-layout #deviceDialog #dialogBody:has(.desktop-grid){padding:12px}
+ body.pt-compact-layout #simulationPanel:not(.hidden){
+  left:0;right:0;top:auto;bottom:0;height:min(70%,360px);
+  width:100%;max-width:none;
+ }
+}
+@media(max-height:430px){
+ body.pt-compact-layout{
+  grid-template-rows:22px 30px 30px minmax(0,1fr) 108px 22px;
+ }
+ body.pt-compact-layout.pt-compact-canvas{
+  grid-template-rows:22px 30px 30px minmax(0,1fr) 0px 22px;
+ }
+ body.pt-compact-layout #bottomDock{grid-template-rows:34px minmax(0,1fr)}
+ body.pt-compact-layout #timeStrip{height:34px}
+ body.pt-compact-layout #rightDock{height:min(65dvh,260px)}
+}
+@media(prefers-reduced-motion:reduce){
+ body.pt-compact-layout #bottomDock,body.pt-compact-layout #rightDock{transition:none}
+}
+/* The legacy off-screen shell transform otherwise leaves its header visible. */
+body.pt-compact-layout #shellPane.closed{visibility:hidden;pointer-events:none}
+body.pt-compact-layout #shellPane:not(.closed){visibility:visible;transform:none}
+/* Keep all compact controls visible on narrow phone and portrait windows. */
+@media(max-width:520px){
+ body.pt-compact-layout #workspaceShell{grid-template-rows:62px minmax(0,1fr)}
+ body.pt-compact-layout #workspaceTabs{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(90px,40%);
+  grid-template-rows:28px 28px;gap:2px 3px;
+  align-items:center;overflow:hidden;padding:1px 3px;
+ }
+ body.pt-compact-layout #workspaceTabs .workspace-left{
+  display:flex;grid-column:1;grid-row:1;min-width:0;width:100%;
+  overflow-x:auto;overflow-y:hidden;scrollbar-width:none;
+ }
+ body.pt-compact-layout #workspaceTabs .workspace-right{
+  grid-column:2;grid-row:1;min-width:0;width:100%;max-width:100%;
+  overflow-x:auto;overflow-y:hidden;scrollbar-width:none;
+ }
+ body.pt-compact-layout #workspaceTabs .pt-compact-actions{
+  display:grid;grid-column:1/-1;grid-row:2;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  width:100%;min-width:0;gap:4px;
+ }
+ body.pt-compact-layout .pt-compact-actions button{
+  width:100%;height:26px;min-width:0;padding:2px 3px;font-size:11px;
+ }
+ body.pt-compact-layout #workspaceTabs .workspace-tab{min-width:57px;padding:2px 4px}
+}
+/* Honour existing user preference to hide the entire bottom dock. */
+body.pt-compact-layout.pt-hide-bottom{
+ grid-template-rows:24px 35px 35px minmax(0,1fr) 0px var(--dock-status-height)
+}
+body.pt-compact-layout.pt-hide-bottom #bottomDock{display:none}
+/* Large-text preferences must not push playback buttons outside the compact strip. */
+body.pt-compact-layout #timeStrip #resetTimeBtn,
+body.pt-compact-layout #timeStrip #eventListBtn,
+body.pt-compact-layout #timeStrip #realtimeBtn,
+body.pt-compact-layout #timeStrip #simulationBtn,
+body.pt-compact-layout #timeStrip #stepBackBtn,
+body.pt-compact-layout #timeStrip #stepForwardBtn,
+body.pt-compact-layout #timeStrip #playBtn,
+body.pt-compact-layout #timeStrip #fastForwardBtn,
+body.pt-compact-layout #timeStrip #powerCycleBtn{
+ height:29px;min-height:29px;max-height:29px;
+}
+body.pt-compact-layout #timeStrip .round-control .control-icon{height:22px;width:22px}
+
+/* Extra close control belongs to the compact PDU drawer only. */
+#ptCompactClosePdu{display:none}
+body.pt-compact-layout.pt-compact-events #ptCompactClosePdu{
+ display:grid;place-items:center;position:absolute;top:3px;right:4px;
+ z-index:4;width:24px;height:24px;padding:0;
+ border:1px solid #5cdbea;border-radius:6px;
+ background:#114363;color:#fff;font-size:18px;
+}
+body.pt-compact-layout.pt-compact-events #ptCompactClosePdu:focus-visible{
+ outline:2px solid #d3ffff;outline-offset:2px;
+}

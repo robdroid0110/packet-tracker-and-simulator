@@ -5,3 +5,50 @@
 
 .diagram-group-frame{position:absolute;border:1px dashed #3c94ae;border-radius:9px;pointer-events:none}.diagram-group-frame>button{pointer-events:auto;font-size:11px;margin:-1px 8px;background:#104761;color:white;border:1px solid #45b8c9;border-radius:4px;padding:2px 8px}
 #nodes .node{isolation:isolate}
+
+/* Logical canvas only: larger readable icons and cables attached to the actual
+   glyph perimeter rather than an invisible 88x64 node/label rectangle. */
+#workspace.diagram-logical .node > .device-icon{
+ width:56px;
+ height:36px;
+}
+#workspace.diagram-logical .diagram-edge .diagram-cable{
+ stroke-linecap:round;
+ vector-effect:non-scaling-stroke;
+}
+#workspace.diagram-logical .diagram-edge .diagram-port{
+ visibility:hidden;
+ pointer-events:none;
+ vector-effect:non-scaling-stroke;
+}
+#workspace.diagram-logical .diagram-edge.diagram-hover .diagram-port,
+#workspace.diagram-logical .diagram-edge.diagram-focused .diagram-port{
+ visibility:visible;
+}
+#workspace.diagram-logical .diagram-edge.diagram-focused .diagram-cable,
+#workspace.diagram-logical .diagram-edge.diagram-hover .diagram-cable{
+ stroke-width:2.8;
+}
+#workspace.diagram-logical .diagram-group-frame{
+ background:rgba(91,195,219,.10);
+ border:1px solid rgba(28,119,150,.55);
+ border-radius:10px;
+}
+#workspace.diagram-logical .diagram-group-frame > button{
+ font-weight:600;
+}
+@media (prefers-reduced-motion:reduce){
+ #workspace.diagram-logical .diagram-edge .diagram-cable{transition:none}
+}
+
+
+/* Port-state triangles derive from backend per-port lights (not decoration). */
+#workspace.diagram-logical .diagram-signal{
+ pointer-events:none;vector-effect:non-scaling-stroke;
+ stroke:#ffffff;stroke-width:.75;
+}
+#workspace.diagram-logical.pt-signals-compact .diagram-signal{display:none}
+#workspace.diagram-logical .diagram-edge.diagram-focused .diagram-signal,
+#workspace.diagram-logical .diagram-edge.diagram-hover .diagram-signal{
+ display:block;stroke-width:1.1;filter:drop-shadow(0 0 2px #fff);
+}
