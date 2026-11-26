@@ -154,7 +154,7 @@ Agent interface:
 class CommandProcessor:
     HISTORY_LIMIT=64
     EDIT_COMMANDS={
-        "sample","device-config","ios","simulation","workspace-tool","module","add","add-model","add-in-cluster","duplicate","remove","remove-group","rename","connect","auto-connect","disconnect",
+        "enterprise","exercise","incident","sample","device-config","ios","simulation","workspace-tool","module","add","add-model","add-in-cluster","duplicate","remove","remove-group","rename","connect","auto-connect","disconnect",
         "move","move-group","physical","visual","cable","icp","note","cluster","ip","subif","up","down","gateway",
         "vlan","switchport","native-vlan","stp","portfast","channel","no-channel",
         "route","ospf","dhcp-pool","dhcp","helper","acl","no-acl","access-group",
@@ -234,6 +234,17 @@ class CommandProcessor:
                 output=load(self.lab,a[2]);self.ios_sessions.clear();return output
             if a[1]=='check':return json.dumps(check(self.lab,a[2]))
             raise LabError('sample action must be load or check')
+        if cmd=="enterprise" and len(a)==2:
+            from .enterprise_training import action
+            return json.dumps(action(self.lab,json.loads(a[1])))
+        if cmd=="exercise" and len(a)==2:
+            from .exercise_runner import action
+            return json.dumps(action(self.lab,json.loads(a[1])))
+        if cmd=="incident" and len(a)==2:
+            from .incident_cases import action
+            body=json.loads(a[1])
+            if not isinstance(body,dict):raise LabError("incident action must be an object")
+            return json.dumps(action(self.lab,body))
         if cmd=="device-config" and len(a)==2:
             from .device_config import action
             return json.dumps(action(self.lab,json.loads(a[1])))

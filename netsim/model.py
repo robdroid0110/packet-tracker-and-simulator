@@ -172,6 +172,15 @@ class NetworkLab:
         self.packet_counter: int = 0
         from .simulation import defaults as simulation_defaults
         self.simulation=simulation_defaults()
+        from .defensive_soc import defaults as soc_defaults
+        self.defensive_soc=soc_defaults()
+        from .incident_cases import defaults as incident_defaults
+        self.incident_cases=incident_defaults()
+        self.exercise_runner=None
+        self.exercise_archive={"version":1,"evicted":0,"runs":[]}
+        self.enterprise_training=None
+        from .enterprise_archive import defaults as enterprise_archive_defaults
+        self.enterprise_archive=enterprise_archive_defaults()
         self.clusters: Dict[str,dict] = {}
         from .workspace_tools import defaults
         self.workspace_tools=defaults()
@@ -546,6 +555,15 @@ class NetworkLab:
         self.packet_events.clear();self.packet_counter=0
         from .simulation import defaults as simulation_defaults
         self.simulation=simulation_defaults()
+        from .defensive_soc import defaults as soc_defaults
+        self.defensive_soc=soc_defaults()
+        from .incident_cases import defaults as incident_defaults
+        self.incident_cases=incident_defaults()
+        self.exercise_runner=None
+        self.exercise_archive={"version":1,"evicted":0,"runs":[]}
+        self.enterprise_training=None
+        from .enterprise_archive import defaults as enterprise_archive_defaults
+        self.enterprise_archive=enterprise_archive_defaults()
         self.physical_locations=self._initial_physical_locations()
         self.device_locations.clear()
         self.physical_device_details.clear()
@@ -650,6 +668,8 @@ class NetworkLab:
         if capture:
             from .simulation import record_external
             record_external(self,self.packet_events[-1])
+            from .defensive_soc import packet
+            packet(self,self.packet_events[-1])
 
     def _trace_packet(self, protocol: str, path: List[str], detail: str, ok: bool = True) -> None:
         if len(path) <= 1:
@@ -1988,7 +2008,10 @@ class NetworkLab:
     def ping_detailed(self, source: str, target_ip: str) -> dict:
         """Run the same ping as the CLI and return its versioned outcome."""
         from .connectivity import ping
-        return ping(self, source, target_ip)
+        result=ping(self, source, target_ip)
+        from .defensive_soc import connectivity
+        connectivity(self,result)
+        return result
 
     @_scoped_forwarding
     def traceroute(self, source: str, target_ip: str) -> Tuple[bool, str]:
@@ -2112,6 +2135,12 @@ class NetworkLab:
                           for key,v in self.icp_panels.items()},
             "events": list(self.events[-200:]),
             "simulation":deepcopy(self.simulation),
+            "defensive_soc":deepcopy(self.defensive_soc),
+            "incident_cases":deepcopy(self.incident_cases),
+            "exercise_runner":deepcopy(self.exercise_runner),
+            "exercise_archive":deepcopy(self.exercise_archive),
+            "enterprise_training":deepcopy(self.enterprise_training),
+            "enterprise_archive":deepcopy(self.enterprise_archive),
             "packet_events": list(self.packet_events), "packet_counter": self.packet_counter,
         }
 
@@ -2319,6 +2348,18 @@ class NetworkLab:
         self.packet_counter = int(data.get("packet_counter", len(self.packet_events)))
         from .simulation import load as load_simulation
         self.simulation=load_simulation(self,data.get("simulation"))
+        from .defensive_soc import load as load_soc
+        self.defensive_soc=load_soc(data.get("defensive_soc"))
+        from .incident_cases import load as load_incidents
+        self.incident_cases=load_incidents(data.get("incident_cases"),self.defensive_soc)
+        from .exercise_runner import load as load_exercise
+        self.exercise_runner=load_exercise(data.get("exercise_runner"))
+        from .exercise_runner import load_archive
+        self.exercise_archive=load_archive(data.get("exercise_archive"),self.exercise_runner)
+        from .enterprise_training import load as load_enterprise
+        self.enterprise_training=load_enterprise(data.get("enterprise_training"))
+        from .enterprise_archive import load as load_enterprise_archive
+        self.enterprise_archive=load_enterprise_archive(data.get("enterprise_archive"),self.enterprise_training)
         self.recompute_ospf()
 
     # ---------- helpers ----------

@@ -114,6 +114,61 @@ class Handler(SimpleHTTPRequestHandler):
             self.send_header("cache-control","public, max-age=86400")
             self.end_headers();self.wfile.write(raw)
             return
+        if path in {"/api/cyber-range/enterprise/archive","/api/cyber-range/enterprise/report"}:
+            from netsim.enterprise_archive import progress, report
+            try:
+                q=parse_qs(urlparse(self.path).query,keep_blank_values=True)
+                with LOCK:
+                    if path.endswith("/archive"):
+                        if q:raise LabError("archive takes no filters")
+                        self._json(progress(LAB))
+                    else:
+                        if set(q)!={"run_id"} or len(q["run_id"])!=1:raise LabError("one run_id is required")
+                        self._json(report(LAB,q["run_id"][0]))
+            except LabError as exc:self._json({"ok":False,"error":str(exc)},400)
+            return
+        if path in {"/api/cyber-range/enterprise","/api/cyber-range/enterprise/schema"}:
+            from netsim.enterprise_training import view, schema
+            if urlparse(self.path).query:
+                self._json({"ok":False,"error":"enterprise endpoint takes no filters"},400);return
+            with LOCK:self._json(schema() if path.endswith("/schema") else view(LAB))
+            return
+        if path == "/api/cyber-range/exercises/report":
+            from netsim.exercise_runner import archived_report
+            try:
+                q=parse_qs(urlparse(self.path).query,keep_blank_values=True)
+                if set(q)!={"run_id"} or len(q["run_id"])!=1:raise LabError("one run_id is required")
+                with LOCK:self._json(archived_report(LAB,q["run_id"][0]))
+            except LabError as exc:self._json({"ok":False,"error":str(exc)},400)
+            return
+        if path in {"/api/cyber-range/exercises", "/api/cyber-range/exercises/schema"}:
+            from netsim.exercise_runner import view, schema
+            if urlparse(self.path).query:
+                self._json({"ok":False,"error":"exercise endpoint takes no filters"},400);return
+            with LOCK:self._json(schema() if path.endswith("/schema") else view(LAB))
+            return
+        if path in {"/api/cyber-range/incidents", "/api/cyber-range/incidents/schema"}:
+            from netsim.incident_cases import view, schema
+            if urlparse(self.path).query:
+                self._json({"ok":False,"error":"incident endpoint takes no filters"},400);return
+            with LOCK:self._json(schema() if path.endswith("/schema") else view(LAB))
+            return
+        if path in {"/api/cyber-range/soc", "/api/cyber-range/soc/schema"}:
+            from netsim.defensive_soc import view, schema
+            try:
+                query=parse_qs(urlparse(self.path).query,keep_blank_values=True)
+                if set(query)-{"kind","outcome"} or any(len(v)!=1 for v in query.values()):
+                    raise LabError("invalid SOC filters")
+                if path.endswith("/schema"):
+                    if query:raise LabError("schema takes no filters")
+                    self._json(schema())
+                else:
+                    with LOCK:self._json(view(LAB,query.get("kind",[None])[0],query.get("outcome",[None])[0]))
+            except LabError as exc:self._json({"ok":False,"error":str(exc)},400)
+            return
+        if path == "/api/cyber-range/schema":
+            from netsim.cyber_range import schema
+            self._json(schema());return
         if path == '/api/v1/connectivity/schema':
             from netsim.connectivity import schema
             self._json(schema());return
@@ -357,6 +412,37 @@ class Handler(SimpleHTTPRequestHandler):
         except Exception as e:
             error={'code':'invalid_request','message':str(e)} if path == '/api/v1/connectivity/ping' else str(e)
             self._json({"ok": False, "error": error}, 400); return
+        if path == "/api/cyber-range/enterprise/action":
+            from netsim.enterprise_training import view
+            with LOCK:
+                output=PROC.execute("enterprise "+shlex.quote(json.dumps(body)))
+                ok=command_ok(output)
+                if ok:save_state()
+                self._json({"ok":ok,"output":output,"enterprise":view(LAB)},200 if ok else 400)
+            return
+        if path == "/api/cyber-range/exercises/action":
+            from netsim.exercise_runner import view
+            with LOCK:
+                output=PROC.execute("exercise "+shlex.quote(json.dumps(body)))
+                ok=command_ok(output)
+                if ok:save_state()
+                self._json({"ok":ok,"output":output,"exercise":view(LAB)},200 if ok else 400)
+            return
+        if path == "/api/cyber-range/incidents/action":
+            from netsim.incident_cases import view
+            with LOCK:
+                output=PROC.execute("incident "+shlex.quote(json.dumps(body)))
+                ok=command_ok(output)
+                if ok:save_state()
+                self._json({"ok":ok,"output":output,"incidents":view(LAB)},200 if ok else 400)
+            return
+        if path == "/api/cyber-range/generate":
+            from netsim.cyber_range import generate
+            try:
+                self._json(generate(body))
+            except (LabError, ValueError, TypeError) as exc:
+                self._json({"ok":False,"error":str(exc)},400)
+            return
         if path == '/api/v1/connectivity/ping':
             from ipaddress import ip_address
             def invalid(code, message):
