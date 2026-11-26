@@ -206,6 +206,8 @@ def step(lab):
   '4':'Not applicable to ARP' if arp else event['headers'].get('transport',{}).get('protocol',event['protocol']).upper(),
   '5':'No independent session model','6':'No independent presentation model','7':'Not applicable to ARP' if arp else event['protocol']})
  lab.packet_events[-1].update(deepcopy(event))
+ from .defensive_soc import packet as soc_packet
+ soc_packet(lab,event)
  s['events'].append(event);s['events']=s['events'][-MAX_EVENTS:];s['cursor']=len(s['events']);s['last_event']=event
  if final and p:
   updates=result.pop('_device_updates',{}) if result else {}
@@ -218,6 +220,8 @@ def step(lab):
    for name in updates:
     if name in lab.devices:lab.devices[name]=restored.devices[name]
   p['result']=result;p['status']=result['status'];event['result']=deepcopy(result)
+  from .defensive_soc import scheduled as soc_scheduled
+  soc_scheduled(lab,p,result,event)
 
  return event
 

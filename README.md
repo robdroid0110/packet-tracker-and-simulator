@@ -32,6 +32,12 @@ The primary CLI command is ./packet-tracker-simulator. The legacy netlab CLI rem
 
 Packet Tracker and Simulator is a local environment for learning and testing virtual network topology configurations without physical networking hardware. A visual interface and an agent API share the same simulation state.
 
+## Defensive cyber range (preview)
+
+The simulator includes local SOC training: modeled packet and service observations, defensive alerts, incident cases, evidence-linked analyst notes and guided availability exercises. Enterprise labs support configurable routed departments, shared DNS dependencies, parent/child incident correlation, redundant DNS failover and sampled recovery verification. Completed assessments can be archived and exported, with scores compared within matching scenarios and configurations.
+
+Open **Cyber Range**, **SOC**, **Incidents**, **Training** or **Enterprise lab** in the toolbar. See [Cyber range guide and limitations](CYBER_RANGE.md). All training faults and observations are synthetic and confined to the simulator; no external network traffic, real VM provisioning, or attack execution is provided.
+
 ## Platforms
 
 The source is a Python-based application for Linux; the optional GUI needs Qt dependencies. Windows builds are made on Windows and are not included in this source repository.
